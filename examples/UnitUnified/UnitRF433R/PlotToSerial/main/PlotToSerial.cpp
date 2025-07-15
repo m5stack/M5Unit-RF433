@@ -51,8 +51,8 @@ void setup()
     }
 
     // TAG specification by ESP_DRAM_LOGx does not work, so use wildcards
-    esp_log_level_set("*", ESP_LOG_NONE); // Disable RMT warning log
-    
+    esp_log_level_set("*", ESP_LOG_NONE);  // Disable RMT warning log
+
     M5_LOGI("M5UnitUnified has been begun");
     M5_LOGI("%s", Units.debugInfo().c_str());
     M5_LOGI("ESP-IDF Version %d.%d.%d", (ESP_IDF_VERSION >> 16) & 0xFF, (ESP_IDF_VERSION >> 8) & 0xFF,

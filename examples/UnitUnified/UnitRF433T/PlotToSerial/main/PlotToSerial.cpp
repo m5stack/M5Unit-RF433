@@ -15,8 +15,8 @@ auto& lcd = M5.Display;
 m5::unit::UnitUnified Units;
 m5::unit::UnitRF433T unit;
 
-//const char* msg[4] = {"Beam Me Up!", "Live Long and Prosper", "Engage!", "Make it so"};
-const char* msg[4] = {"Beam", "Live", "Engage", "Make"};
+const char* msg[4] = {"Beam Me Up!", "Live Long and Prosper", "Engage!", "Make it so"};
+// const char* msg[4] = {"Beam", "Live", "Engage", "Make"};
 uint8_t msg_index{};
 
 }  // namespace
