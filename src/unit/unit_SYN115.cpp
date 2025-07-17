@@ -151,10 +151,10 @@ bool UnitSYN115::send(const uint8_t burst_transmission_count)
         // preamble
         _rmt_buffer.insert(_rmt_buffer.begin(), std::begin(preamble_array), std::end(preamble_array));
 
-        _closing = true;
-
         // EOF
         _rmt_buffer.push_back(rmt_eof);
+
+        _closing = true;
     }
 
     //    auto wait = estimate_tx_timeout_ticks();

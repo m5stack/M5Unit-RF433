@@ -65,10 +65,12 @@ public:
 
     ///@name Communication identifier
     ///@{
+    //! @brief Get communication identifier
     inline rf433::communication_identifier_t communicationIdentifier() const
     {
         return _comm_id;
     }
+    //! @brief Set communication identifier
     inline void setCommunicationIdentifier(rf433::communication_identifier_t id)
     {
         _comm_id = id;
