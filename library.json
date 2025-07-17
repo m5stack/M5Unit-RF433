@@ -1,0 +1,30 @@
+{
+    "name": "M5Unit-RF433",
+    "description": "Library for M5Stack UNIT RF433 using M5UnitUnified",
+    "keywords": "M5Stack",
+    "authors": {
+        "name": "M5Stack",
+        "url": "http://www.m5stack.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/m5stack/M5Unit-RF433.git"
+    },
+    "dependencies": {
+        "m5stack/M5UnitUnified": ">=0.1.6"
+    },
+    "version": "0.0.1",
+    "frameworks": [
+        "arduino"
+    ],
+    "platforms": [
+        "espressif32"
+    ],
+    "headers": "M5UnitUnifiedRF433.h",
+    "license": "MIT",
+    "export": {
+        "exclude": [
+            "docs/html"
+        ]
+    }
+}
