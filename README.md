@@ -46,7 +46,7 @@ Please follow the radio laws in the location where it is used.
 See also [examples/UnitUnified](examples/UnitUnified)
 
 ## Doxygen document
-[GitHub Pages](https://m5stack.github.io/M5Unit-TUBE/)
+[GitHub Pages](https://m5stack.github.io/M5Unit-RF433/)
 
 If you want to generate documents on your local machine, execute the following command
 
