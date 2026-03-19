@@ -31,8 +31,8 @@ public:
       @brief Settings for begin
      */
     struct config_t {
-        //! Send in update() if true
-        bool send_in_update{true};
+        //! If true, pushed data is automatically sent during update(). If false, call send() explicitly.
+        bool send_in_update{false};
         //! Count of burst transmission
         uint8_t burst_transmission_count{4};
         //! Protocol
@@ -41,12 +41,12 @@ public:
 
     ///@name Configuration for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config()
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -78,10 +78,13 @@ public:
     ///@}
 
     /*!
-      @param Push back to payload
+      @brief Push back data to payload
       @param data Input data buffer
       @param len Length of data buffer
       @return True if successful
+      @warning Total payload size is limited to 255 bytes.
+      The receiver side has a stricter limit based on RMT hardware (rf433::MaxPayloadSize).
+      @see rf433::MaxPayloadSize
      */
     bool push_back(const uint8_t* data, const uint32_t len);
 

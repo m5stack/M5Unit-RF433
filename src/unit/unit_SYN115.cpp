@@ -88,7 +88,7 @@ void UnitSYN115::update(const bool force)
 bool UnitSYN115::push_back(const uint8_t* data, const uint32_t len)
 {
     if (_payload_size + len > 255) {
-        M5_LIB_LOGE("Not enough payload (max 255) %u/%u", _payload_size, len);
+        M5_LIB_LOGE("Payload exceeds max (255 bytes): %u + %u", _payload_size, len);
         return false;
     }
 
@@ -157,8 +157,10 @@ bool UnitSYN115::send(const uint8_t burst_transmission_count)
         _closing = true;
     }
 
-    //    auto wait = estimate_tx_timeout_ticks();
-    auto wait     = portMAX_DELAY;
+    auto wait = estimate_tx_timeout_ticks();
+#if 0
+    wait      = portMAX_DELAY;
+#endif
     uint8_t count = burst_transmission_count ? burst_transmission_count : 1;
     bool ret{true};
 
