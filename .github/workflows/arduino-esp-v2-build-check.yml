@@ -2,7 +2,7 @@ name: Build(arduino-esp32:2.x)
 
 env:
   SKETCH_NAMES_FIND_START: ./examples/UnitUnified
-  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified,M5Unit-HUB
+  REQUIRED_LIBRARIES: M5Unified,M5UnitUnified
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
   build:
     name: ${{ matrix.unit }}:${{ matrix.sketch }}:${{matrix.board}}@${{matrix.platform-version}}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
 
     strategy:
       fail-fast: false
@@ -94,10 +94,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
-      # Build 
+      # Build
       - name: Compile examples
         uses: ArminJo/arduino-test-compile@master
         with:

@@ -11,7 +11,6 @@ on:
     branches:
       - '*'
     paths:
-      - '*'
       - '**.ino'
       - '**.cpp'
       - '**.hpp'
@@ -32,28 +31,31 @@ on:
       - '**.clang-format'
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   formatting-check:
     name: Formatting Check
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         path:
-          - check: 'src'    # path to include
-            exclude: ''    # path to exclude
-          - check: 'test'    # path to include
-            exclude: ''    # path to exclude
-          - check: 'examples'    # path to include
-            exclude: ''    # path to exclude
+          - check: 'src'
+          - check: 'test'
+          - check: 'examples'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Run clang-format style check for C/C++/Protobuf programs.
-        uses: jidicula/clang-format-action@v4.10.2 # Using include-regex 10.x or later
+        uses: jidicula/clang-format-action@v4.16.0
         with:
           clang-format-version: '13'
           check-path: ${{ matrix.path['check'] }}
