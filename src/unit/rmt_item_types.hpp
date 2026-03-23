@@ -60,6 +60,10 @@ constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< ESP32: 8ch x 64 items, use 6 = 
   - ESP32: 40 bytes (practical safe limit ~23 bytes)
   - ESP32-S3: 40 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
   - ESP-IDF 5.x (RMT v2): 255 bytes
+  @warning When communicating between RMT v1 (ESP-IDF 4.x) and RMT v2 (ESP-IDF 5.x) devices,
+  the payload size must not exceed the receiver's limit. A v2 transmitter can send up to 255 bytes,
+  but a v1 receiver's capacity is much smaller and varies depending on AGC noise conditions.
+  Always limit the payload to the receiver's max_payload_size.
   @see UnitSYN531R::config_t::max_payload_size for the configurable runtime limit
  */
 constexpr uint8_t MaxPayloadSize =

@@ -41,6 +41,9 @@ public:
         //! Exceeding the hardware capacity may cause data loss (ESP32) or crash (ESP32-S3).
         //! Increase at your own risk after testing in your environment.
         //! @note Practical safe defaults (tested): ESP32/ESP32-S3=23, RMT v2(ESP-IDF 5.x)=255
+        //! @warning When communicating between RMT v1 and v2 devices, the transmitter's payload
+        //! must not exceed the receiver's limit. The v1 RX capacity varies with AGC noise conditions.
+        //! Test in your actual environment to determine the reliable maximum for your setup.
         uint8_t max_payload_size
         {
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
