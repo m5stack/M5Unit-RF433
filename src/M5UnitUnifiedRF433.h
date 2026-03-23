@@ -5,7 +5,7 @@
  */
 /*!
   @file M5UnitUnifiedRF433.h
-  @brief Main header of M5Unit-RF433 using M5UnitUnfied
+  @brief Main header of M5Unit-RF433 using M5UnitUnified
 */
 #ifndef M5_UNIT_UNIFIED_RF433_H
 #define M5_UNIT_UNIFIED_RF433_H

@@ -7,8 +7,8 @@
   @file rmt_item_types.hpp
   @brief RMT related definition and function for RF433
 */
-#ifndef M5_UNIT_RF433_RNT_ITEM_TYPES_HPP
-#define M5_UNIT_RF433_RNT_ITEM_TYPES_HPP
+#ifndef M5_UNIT_RF433_RMT_ITEM_TYPES_HPP
+#define M5_UNIT_RF433_RMT_ITEM_TYPES_HPP
 
 #include <M5UnitComponent.hpp>
 
@@ -26,14 +26,10 @@ constexpr m5::unit::gpio::m5_rmt_item_t rmt_preamble{{500, 1, 500, 0}};   // pre
 
 using container_type             = std::vector<uint8_t>;              //!< Container
 using item_container_type        = std::vector<gpio::m5_rmt_item_t>;  //!< Item container
-using communication_identifier_t = uint32_t;                          //!< Communication identifier
+using communication_identifier_t = uint8_t;                           //!< Communication identifier (0-255)
 
-///@name Protocol attribute bits
-///@{
-using Protocol = uint8_t;                            //!< Protocol type
-constexpr Protocol ProtocolIncludeSendCount{0x01};   //!< Include send count
-constexpr Protocol ProtocolIncludeIdentifier{0x02};  //!< Include identifier
-///@}
+//! @brief Protocol overhead in bytes: CRC8(1) + ID(1) + Count(1) + Length(1) = 4
+constexpr uint8_t ProtocolOverhead = 4;
 
 /*!
   @brief Maximum RMT items receivable in a single frame per platform
@@ -57,12 +53,12 @@ constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< ESP32: 8ch x 64 items, use 6 = 
 
 /*!
   @brief Theoretical maximum payload size in bytes for the current platform
-  @details Calculated from RmtRxMaxItems with full protocol overhead (identifier + send count).
+  @details Calculated from RmtRxMaxItems with protocol overhead (4 bytes).
   This is the theoretical limit based on RMT hardware memory. In practice, AGC noise from the
   SYN531R receiver consumes RMT items, reducing the usable capacity.
   Theoretical values:
-  - ESP32: 39 bytes (practical safe limit ~23 bytes)
-  - ESP32-S3: 39 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
+  - ESP32: 40 bytes (practical safe limit ~23 bytes)
+  - ESP32-S3: 40 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
   - ESP-IDF 5.x (RMT v2): 255 bytes
   @see UnitSYN531R::config_t::max_payload_size for the configurable runtime limit
  */
@@ -72,29 +68,20 @@ constexpr uint8_t MaxPayloadSize =
 #elif defined(CONFIG_IDF_TARGET_ESP32S3)
     // ESP32-S3 uses mem_blocks=1 with threshold ISR wrapping;
     // theoretical limit depends on ISR throughput, use ESP32 equivalent
-    39;
+    40;
 #else
-    (uint8_t)((RmtRxMaxItems - 1 /*SOF*/) / 8 - 1 /*checksum*/ - 1 /*protocol*/ -
-              (int)sizeof(communication_identifier_t) /*identifier*/ - 1 /*send_count*/ - 1 /*length*/);
+    (uint8_t)((RmtRxMaxItems - 1 /*SOF*/) / 8 - ProtocolOverhead);
 #endif
 
 /*!
   @brief Calculate the minimum ring buffer size required to receive the given payload size
   @param payload_size Payload size in bytes
-  @param protocol Protocol attribute bits
   @return Required ring buffer size in bytes
  */
-constexpr uint32_t calculateRingBufferSize(const uint32_t payload_size,
-                                           const Protocol protocol = ProtocolIncludeSendCount |
-                                                                     ProtocolIncludeIdentifier)
+constexpr uint32_t calculateRingBufferSize(const uint32_t payload_size)
 {
-    // Frame: SOF(1 item) + checksum(1) + protocol(1) + [identifier(4)] + [send_count(1)] + length(1) + payload(n)
-    return (1                     /*SOF*/
-            + (1 /*checksum*/ + 1 /*protocol*/
-               + ((protocol & ProtocolIncludeIdentifier) ? sizeof(communication_identifier_t) : 0) +
-               ((protocol & ProtocolIncludeSendCount) ? 1 : 0) + 1 /*length*/ + payload_size) *
-                  8 /*Manchester: 8 RMT items per byte*/) *
-               sizeof(m5::unit::gpio::m5_rmt_item_t) +
+    // Frame: SOF(1 item) + (overhead + payload) * 8 Manchester items per byte
+    return (1 /*SOF*/ + (ProtocolOverhead + payload_size) * 8) * sizeof(m5::unit::gpio::m5_rmt_item_t) +
            2 /*length prefix*/;
 }
 
