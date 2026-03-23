@@ -19,8 +19,8 @@ Please follow the radio laws in the location where it is used.
 
 ## Related Link
 
-- [Unit RF433R - Document & Datasheet](https://docs.m5stack.com/ja/unit/rf433_r)
-- [Unit RF433T - Document & Datasheet](https://docs.m5stack.com/ja/unit/rf433_t)
+- [Unit RF433R - Document & Datasheet](https://docs.m5stack.com/en/unit/rf433_r)
+- [Unit RF433T - Document & Datasheet](https://docs.m5stack.com/en/unit/rf433_t)
 
 ## Required Libraries:
 
@@ -31,7 +31,7 @@ Please follow the radio laws in the location where it is used.
 
 ## License
 
-- [M5Unit-RF433- MIT](LICENSE)
+- [M5Unit-RF433 - MIT](LICENSE)
 
 
 ## Support via [PbHub](https://docs.m5stack.com/en/unit/pbhub_1.1)
@@ -58,6 +58,6 @@ It will output it under docs/html
 If you want to output Git commit hashes to html, do it for the git cloned folder.
 
 ### Required
-- [Doxyegn](https://www.doxygen.nl/)
+- [Doxygen](https://www.doxygen.nl/)
 - [pcregrep](https://formulae.brew.sh/formula/pcre2)
 - [Git](https://git-scm.com/) (Output commit hash to html)
