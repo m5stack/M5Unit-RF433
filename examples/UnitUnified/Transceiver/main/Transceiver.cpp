@@ -7,6 +7,8 @@
   @file Transceiver.ino
   @brief UnitRF433T/R example
   NOTICE: Devices to be connected must have multiple ports
+  PortA: UnitRF433T
+  PortB: UnitRF433R
 */
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
@@ -76,7 +78,7 @@ void setup()
     esp_log_level_set("*", ESP_LOG_NONE);  // Disable RMT warning log
 
     //
-    M5_LOGI("M5UnitUnified has been begun");
+    M5_LOGI("M5UnitUnified initialized");
     M5_LOGI("%s", Units.debugInfo().c_str());
     my_id = esp_random();
     static_cast<m5::unit::rf433::M5Codec*>(transmitter.codec().get())->setCommunicationIdentifier(my_id);

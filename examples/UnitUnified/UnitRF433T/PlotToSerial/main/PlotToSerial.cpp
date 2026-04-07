@@ -63,7 +63,7 @@ void setup()
         sweep_buf[i] = 'A' + (i % 26);
     }
 
-    M5_LOGI("M5UnitUnified has been begun");
+    M5_LOGI("M5UnitUnified initialized");
     M5_LOGI("%s", Units.debugInfo().c_str());
     M5.Log.printf("MyID: %02X\n", custom->communicationIdentifier());
     lcd.fillScreen(TFT_DARKGREEN);
