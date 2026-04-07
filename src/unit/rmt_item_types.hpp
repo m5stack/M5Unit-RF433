@@ -57,8 +57,8 @@ constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< ESP32: 8ch x 64 items, use 6 = 
   This is the theoretical limit based on RMT hardware memory. In practice, AGC noise from the
   SYN531R receiver consumes RMT items, reducing the usable capacity.
   Theoretical values:
-  - ESP32: 40 bytes (practical safe limit ~23 bytes)
-  - ESP32-S3: 40 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
+  - ESP32: 43 bytes (practical safe limit ~23 bytes)
+  - ESP32-S3: 43 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
   - ESP-IDF 5.x (RMT v2): 255 bytes
   @warning When communicating between RMT v1 (ESP-IDF 4.x) and RMT v2 (ESP-IDF 5.x) devices,
   the payload size must not exceed the receiver's limit. A v2 transmitter can send up to 255 bytes,
@@ -72,9 +72,9 @@ constexpr uint8_t MaxPayloadSize =
 #elif defined(CONFIG_IDF_TARGET_ESP32S3)
     // ESP32-S3 uses mem_blocks=1 with threshold ISR wrapping;
     // theoretical limit depends on ISR throughput, use ESP32 equivalent
-    40;
+    43;
 #else
-    (uint8_t)((RmtRxMaxItems - 1 /*SOF*/) / 8 - ProtocolOverhead);
+    static_cast<uint8_t>((RmtRxMaxItems - 1 /*SOF*/) / 8 - ProtocolOverhead);
 #endif
 
 /*!

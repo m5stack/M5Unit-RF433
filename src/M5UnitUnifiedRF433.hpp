@@ -28,8 +28,8 @@ namespace m5 {
  */
 namespace unit {
 
-using UnitRF433T = UnitSYN115;
-using UnitRF433R = UnitSYN531R;
+using UnitRF433T = UnitSYN115;   //!< @brief Alias for UnitSYN115 (RF433 transmitter, SKU:U114)
+using UnitRF433R = UnitSYN531R;  //!< @brief Alias for UnitSYN531R (RF433 receiver, SKU:U113)
 
 }  // namespace unit
 }  // namespace m5

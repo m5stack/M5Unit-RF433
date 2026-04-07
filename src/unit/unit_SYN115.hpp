@@ -82,11 +82,11 @@ public:
 
     /*!
       @brief Send force if exists payload
-      @param burst_transmission_count Count of burst transmission
+      @param burst_transmission_count Count of burst transmission (0 = use config_t::burst_transmission_count)
       @return True if successful
       @note The payload will be empty if successful
      */
-    bool send(const uint8_t burst_transmission_count = 4);
+    bool send(const uint8_t burst_transmission_count = 0);
 
     /*!
       @brief Clear inner buffer

@@ -73,6 +73,7 @@ bool UnitSYN115::begin()
 
 void UnitSYN115::update(const bool force)
 {
+    (void)force;
     if (!_payload.empty() && _cfg.send_in_update) {
         if (!send(_cfg.burst_transmission_count)) {
             M5_LIB_LOGD("Failed to send");
@@ -105,13 +106,13 @@ bool UnitSYN115::send(const uint8_t burst_transmission_count)
     auto rmt_items = _codec->encode(_payload.data(), _payload_size);
 
     auto wait     = estimate_tx_timeout_ticks(rmt_items);
-    uint8_t count = burst_transmission_count ? burst_transmission_count : 1;
+    uint8_t count = burst_transmission_count ? burst_transmission_count : _cfg.burst_transmission_count;
     bool ret{true};
 
     // Burst transmission
     while (ret && count--) {
-        ret &= (writeWithTransaction((const uint8_t*)rmt_items.data(), rmt_items.size() * sizeof(m5_rmt_item_t),
-                                     wait) == m5::hal::error::error_t::OK);
+        ret &= (writeWithTransaction(reinterpret_cast<const uint8_t*>(rmt_items.data()),
+                                     rmt_items.size() * sizeof(m5_rmt_item_t), wait) == m5::hal::error::error_t::OK);
     }
     if (ret) {
         clear();

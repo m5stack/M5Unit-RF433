@@ -135,7 +135,8 @@ bool UnitSYN531R::read_data()
     }
 
     // buff is 4-byte aligned (heap_caps_aligned_alloc), buff+2 is 2-byte aligned.
-    // m5_rmt_item_t requires only 2-byte alignment (uint16_t fields), so this is safe.
+    // rmt_item32_t is naturally 4-byte aligned, but ESP32 (Xtensa) and ESP32-C6 (RISC-V)
+    // both handle unaligned access transparently, so buff+2 is safe in practice.
     auto* items = reinterpret_cast<m5::unit::gpio::m5_rmt_item_t*>(buff + 2 /* len */);
 
     // Decode via codec (handles SOF scan, Manchester decode, CRC validation)
