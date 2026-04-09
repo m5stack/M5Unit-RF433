@@ -11,8 +11,9 @@
 #define M5_UNIT_RF433_UNIT_SYN531R_HPP
 
 #include <M5UnitComponent.hpp>
-#include "rmt_item_types.hpp"
+#include <memory>
 #include <vector>
+#include "codec/m5_codec.hpp"
 
 namespace m5 {
 namespace unit {
@@ -33,18 +34,34 @@ public:
       @brief Settings for begin
      */
     struct config_t {
-        //! Protocol
-        rf433::Protocol protocol{rf433::ProtocolIncludeSendCount | rf433::ProtocolIncludeIdentifier};
+        //! Maximum receivable payload size in bytes
+        //! @note Default is a conservative value safe for most environments.
+        //! Theoretical max is rf433::MaxPayloadSize per platform, but AGC noise
+        //! from the SYN531R receiver consumes RMT memory, reducing the practical limit.
+        //! Exceeding the hardware capacity may cause data loss (ESP32) or crash (ESP32-S3).
+        //! Increase at your own risk after testing in your environment.
+        //! @note Practical safe defaults (tested): ESP32/ESP32-S3=23, RMT v2(ESP-IDF 5.x)=255
+        //! @warning When communicating between RMT v1 and v2 devices, the transmitter's payload
+        //! must not exceed the receiver's limit. The v1 RX capacity varies with AGC noise conditions.
+        //! Test in your actual environment to determine the reliable maximum for your setup.
+        uint8_t max_payload_size
+        {
+#if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
+            255
+#else
+            23
+#endif
+        };
     };
 
     ///@name Configuration for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config()
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -53,15 +70,14 @@ public:
 
     UnitSYN531R() : Component(DEFAULT_ADDRESS)
     {
-        auto ccfg        = component_config();
-        ccfg.stored_size = 2048;  // inner buffer size
-        component_config(ccfg);
     }
     virtual ~UnitSYN531R()
     {
     }
 
+    //! @brief Initialize the receiver unit
     virtual bool begin() override;
+    //! @brief Update the receiver unit
     virtual void update(const bool force = false) override;
 
     ///@name Data
@@ -86,7 +102,7 @@ public:
     {
         return !_data.empty() ? _data.back() : 0;
     }
-    //! @brief Discard  the oldest data accumulated
+    //! @brief Discard the oldest data accumulated
     inline void discard()
     {
         if (!_data.empty()) {
@@ -106,11 +122,31 @@ public:
     }
     ///@}
 
+    //! @brief Get codec (for codec-specific configuration)
+    inline std::shared_ptr<rf433::ProtocolCodec> codec()
+    {
+        return _codec;
+    }
+    //! @brief Set protocol codec (default: M5Codec)
+    void setCodec(std::shared_ptr<rf433::ProtocolCodec> codec)
+    {
+        _codec = codec;
+    }
+
 protected:
     bool read_data();
 
 private:
+    struct FreeDeleter {
+        void operator()(uint8_t* p) const
+        {
+            free(p);
+        }
+    };
+    std::shared_ptr<rf433::ProtocolCodec> _codec{std::make_shared<rf433::M5Codec>()};
     container_type _data{};
+    std::unique_ptr<uint8_t[], FreeDeleter> _rx_buffer{};
+    size_t _rx_buffer_size{};
     config_t _cfg{};
 };
 

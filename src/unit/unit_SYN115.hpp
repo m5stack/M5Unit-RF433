@@ -11,8 +11,8 @@
 #define M5_UNIT_RF433_UNIT_SYN115_HPP
 
 #include <M5UnitComponent.hpp>
-#include <m5_utility/crc.hpp>
-#include "rmt_item_types.hpp"
+#include <memory>
+#include "codec/m5_codec.hpp"
 
 namespace m5 {
 namespace unit {
@@ -31,22 +31,20 @@ public:
       @brief Settings for begin
      */
     struct config_t {
-        //! Send in update() if true
-        bool send_in_update{true};
+        //! If true, pushed data is automatically sent during update(). If false, call send() explicitly.
+        bool send_in_update{false};
         //! Count of burst transmission
-        uint8_t burst_transmission_count{4};
-        //! Protocol
-        rf433::Protocol protocol{rf433::ProtocolIncludeSendCount | rf433::ProtocolIncludeIdentifier};
+        uint8_t burst_transmission_count{2};
     };
 
     ///@name Configuration for begin
     ///@{
-    /*! @brief Gets the configration */
+    /*! @brief Gets the configuration */
     inline config_t config()
     {
         return _cfg;
     }
-    //! @brief Set the configration
+    //! @brief Set the configuration
     inline void config(const config_t& cfg)
     {
         _cfg = cfg;
@@ -60,60 +58,58 @@ public:
     {
     }
 
+    //! @brief Initialize the transmitter unit
     virtual bool begin() override;
+    //! @brief Update the transmitter unit
     virtual void update(const bool force = false) override;
 
-    ///@name Communication identifier
-    ///@{
-    //! @brief Get communication identifier
-    inline rf433::communication_identifier_t communicationIdentifier() const
+    //! @brief Get codec (for codec-specific configuration)
+    inline std::shared_ptr<rf433::ProtocolCodec> codec()
     {
-        return _comm_id;
+        return _codec;
     }
-    //! @brief Set communication identifier
-    inline void setCommunicationIdentifier(rf433::communication_identifier_t id)
-    {
-        _comm_id = id;
-    }
-    ///@}
 
     /*!
-      @param Push back to payload
+      @brief Push back data to payload
       @param data Input data buffer
       @param len Length of data buffer
       @return True if successful
+      @warning Total payload size is limited to 255 bytes.
+      The receiver side has a stricter limit based on RMT hardware (rf433::MaxPayloadSize).
+      @see rf433::MaxPayloadSize
      */
     bool push_back(const uint8_t* data, const uint32_t len);
 
     /*!
       @brief Send force if exists payload
-      @param burst_transmission_count Count of burst transmission
+      @param burst_transmission_count Count of burst transmission (0 = use config_t::burst_transmission_count)
       @return True if successful
       @note The payload will be empty if successful
      */
-    bool send(const uint8_t burst_transmission_count = 4);
+    bool send(const uint8_t burst_transmission_count = 0);
 
     /*!
       @brief Clear inner buffer
      */
     inline void clear()
     {
-        clear_rmt_buffer();
+        _payload.clear();
+        _payload_size = 0;
+    }
+
+    //! @brief Set protocol codec (default: M5Codec)
+    void setCodec(std::shared_ptr<rf433::ProtocolCodec> codec)
+    {
+        _codec = codec;
     }
 
 protected:
-    void clear_rmt_buffer();
-    TickType_t estimate_tx_timeout_ticks(const uint32_t margin_ms = 10) const;
-
-protected:
-    m5::utility::CRC8_Checksum _crc8{};
-    uint16_t _payload_size{};
+    TickType_t estimate_tx_timeout_ticks(const rf433::item_container_type& items, const uint32_t margin_ms = 10) const;
 
 private:
-    rf433::item_container_type _rmt_buffer{};
-    rf433::communication_identifier_t _comm_id{};
-    bool _closing{};
-    uint8_t _send_count{};  // Transmission Counter
+    std::shared_ptr<rf433::ProtocolCodec> _codec{std::make_shared<rf433::M5Codec>()};
+    std::vector<uint8_t> _payload{};
+    uint16_t _payload_size{};
     config_t _cfg{};
 };
 

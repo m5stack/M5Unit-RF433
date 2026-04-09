@@ -8,7 +8,6 @@
   @brief SYN115 unit for M5UnitUnified
 */
 #include "unit_SYN115.hpp"
-#include "rmt_item_types.hpp"
 #include <M5Utility.hpp>
 
 using namespace m5::utility::mmh3;
@@ -24,10 +23,6 @@ inline bool is_unit_pbhub(Component* u)
     static constexpr types::uid_t pbhub_uid{"UnitPbHub"_mmh3};
     return u->identifier() == pbhub_uid;
 }
-
-constexpr m5::unit::gpio::m5_rmt_item_t rmt_eof{{1000 * 5, 0, 1000 * 5, 0}};
-constexpr m5_rmt_item_t preamble_array[] = {rmt_preamble, rmt_preamble, rmt_preamble, rmt_preamble, rmt_preamble,
-                                            rmt_preamble, rmt_preamble, rmt_preamble, rmt_preamble, rmt_preamble};
 
 }  // namespace
 
@@ -72,119 +67,64 @@ bool UnitSYN115::begin()
         return false;
     }
 
-    clear_rmt_buffer();
+    clear();
     return true;
 }
 
 void UnitSYN115::update(const bool force)
 {
-    if (!_rmt_buffer.empty() && _cfg.send_in_update) {
+    (void)force;
+    if (!_payload.empty() && _cfg.send_in_update) {
         if (!send(_cfg.burst_transmission_count)) {
-            M5_LIB_LOGD("Failed to send %zu", _rmt_buffer.size());
+            M5_LIB_LOGD("Failed to send");
         }
     }
 }
 
 bool UnitSYN115::push_back(const uint8_t* data, const uint32_t len)
 {
+    if (!data || len == 0) {
+        return false;
+    }
     if (_payload_size + len > 255) {
-        M5_LIB_LOGE("Not enough payload (max 255) %u/%u", _payload_size, len);
+        M5_LIB_LOGE("Payload exceeds max (255 bytes): %u + %u", _payload_size, len);
         return false;
     }
 
-    if (!_closing) {
-        _crc8.update(data, len);
-        auto ev = encodeManchester(data, len);
-        _rmt_buffer.insert(_rmt_buffer.end(), ev.begin(), ev.end());
-        _payload_size += len;
-        return true;
-    }
-    M5_LIB_LOGD("push_back rejected because _closing=true");
-    return false;
+    _payload.insert(_payload.end(), data, data + len);
+    _payload_size += len;
+    return true;
 }
 
 bool UnitSYN115::send(const uint8_t burst_transmission_count)
 {
-    if (_rmt_buffer.empty()) {
+    if (_payload.empty()) {
         return false;
     }
 
-    // preamble + SOF + SUM + Protocol[1] + [identifier 4 if exists] [send cout 1 if exists ] [payload length] [payload
-    // n]
-    if (!_closing) {
-        // Add Length of payload (before encode)
-        {
-            uint8_t ps = _payload_size;
-            auto sv    = encodeManchester(&ps, 1);
-            _rmt_buffer.insert(_rmt_buffer.begin(), sv.begin(), sv.end());
-        }
-        // Add send count (1)
-        if (_cfg.protocol & ProtocolIncludeSendCount) {
-            auto sv = encodeManchester(&_send_count, 1);
-            _rmt_buffer.insert(_rmt_buffer.begin(), sv.begin(), sv.end());
-            ++_send_count;
-        }
+    // Encode complete frame via codec
+    auto rmt_items = _codec->encode(_payload.data(), _payload_size);
 
-        // Add identifier (4)
-        if (_cfg.protocol & ProtocolIncludeIdentifier) {
-            auto sv = encodeManchester((uint8_t*)&_comm_id, sizeof(_comm_id));
-            _rmt_buffer.insert(_rmt_buffer.begin(), sv.begin(), sv.end());
-        }
-
-        // Protocol (1)
-        {
-            auto sv = encodeManchester(&_cfg.protocol, 1);
-            _rmt_buffer.insert(_rmt_buffer.begin(), sv.begin(), sv.end());
-        }
-
-        // CheckSum (1)
-        {
-            const uint8_t sum = _crc8.value();  // only payload
-            auto sv           = encodeManchester(&sum, 1);
-            _rmt_buffer.insert(_rmt_buffer.begin(), sv.begin(), sv.end());
-        }
-
-        // SOF
-        constexpr m5_rmt_item_t sof[2] = {rmt_sof_0, rmt_sof_1};
-        _rmt_buffer.insert(_rmt_buffer.begin(), std::begin(sof), std::end(sof));
-
-        // preamble
-        _rmt_buffer.insert(_rmt_buffer.begin(), std::begin(preamble_array), std::end(preamble_array));
-
-        // EOF
-        _rmt_buffer.push_back(rmt_eof);
-
-        _closing = true;
-    }
-
-    //    auto wait = estimate_tx_timeout_ticks();
-    auto wait     = portMAX_DELAY;
-    uint8_t count = burst_transmission_count ? burst_transmission_count : 1;
+    auto wait     = estimate_tx_timeout_ticks(rmt_items);
+    uint8_t count = burst_transmission_count ? burst_transmission_count : _cfg.burst_transmission_count;
     bool ret{true};
 
     // Burst transmission
     while (ret && count--) {
-        ret &= (writeWithTransaction((const uint8_t*)_rmt_buffer.data(), _rmt_buffer.size() * sizeof(m5_rmt_item_t),
-                                     wait) == m5::hal::error::error_t::OK);
-    };
+        ret &= (writeWithTransaction(reinterpret_cast<const uint8_t*>(rmt_items.data()),
+                                     rmt_items.size() * sizeof(m5_rmt_item_t), wait) == m5::hal::error::error_t::OK);
+    }
     if (ret) {
-        clear_rmt_buffer();
+        clear();
     }
     return ret;
 }
 
-void UnitSYN115::clear_rmt_buffer()
-{
-    _rmt_buffer.clear();
-    _crc8.clear();
-    _payload_size = 0;
-    _closing      = false;
-}
-
-TickType_t UnitSYN115::estimate_tx_timeout_ticks(const uint32_t margin_ms) const
+TickType_t UnitSYN115::estimate_tx_timeout_ticks(const rf433::item_container_type& items,
+                                                 const uint32_t margin_ms) const
 {
     uint32_t total_us{};
-    for (const auto& item : _rmt_buffer) {
+    for (const auto& item : items) {
         total_us += item.duration0 + item.duration1;
     }
     total_us += margin_ms * 1000;

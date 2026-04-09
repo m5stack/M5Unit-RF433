@@ -7,6 +7,8 @@
   @file Transceiver.ino
   @brief UnitRF433T/R example
   NOTICE: Devices to be connected must have multiple ports
+  PortA: UnitRF433T
+  PortB: UnitRF433R
 */
 #include <M5Unified.h>
 #include <M5UnitUnified.h>
@@ -20,18 +22,23 @@ m5::unit::UnitRF433T transmitter;
 m5::unit::UnitRF433R receiver;
 
 m5::unit::rf433::communication_identifier_t my_id{};
-const char* msg[4] = {"Beam Me Up!", "Live Long and Prosper", "Engage!", "Make it so"};
-// const char* msg[4] = {"Beam", "Live", "Engage", "Make"};
 
-uint8_t msg_index{};
+// Payload size sweep test.
+// Use this to find the maximum reliable payload size for your receiver environment.
+constexpr uint8_t sweep_sizes[] = {16, 20, 21, 22, 23, 24, 25, 32, 64, 128, 255};
+constexpr size_t SWEEP_COUNT    = sizeof(sweep_sizes) / sizeof(sweep_sizes[0]);
+uint8_t sweep_buf[255];
+uint8_t sweep_idx{};
 
 uint8_t latest_send_count{0xFF};
+int16_t half_h{};  // LCD half height
 
 }  // namespace
 
 void setup()
 {
     M5.begin();
+    M5.setTouchButtonHeightByRatio(100);
 
     // The screen shall be in landscape mode
     if (lcd.height() > lcd.width()) {
@@ -42,13 +49,15 @@ void setup()
     auto port_a_out = M5.getPin(m5::pin_name_t::port_a_pin2);
     auto port_b_in  = M5.getPin(m5::pin_name_t::port_b_in);
     auto port_b_out = M5.getPin(m5::pin_name_t::port_b_out);
-    // auto port_c_in  = M5.getPin(m5::pin_name_t::port_c_in);
-    // auto port_c_out = M5.getPin(m5::pin_name_t::port_c_out);
-    M5_LOGI("A:%d,%d B:%d,%d", port_a_in, port_a_out, port_b_in, port_b_out);
+    M5_LOGI("PortA:%d,%d PortB:%d,%d", port_a_in, port_a_out, port_b_in, port_b_out);
 
-    if (port_a_in < 0 || port_a_out < 0 || port_b_in < 0 || port_b_out < 0) {
+    if (M5.getBoard() == m5::board_t::board_ArduinoNessoN1 || port_a_in < 0 || port_a_out < 0 || port_b_in < 0 ||
+        port_b_out < 0 || port_a_in == port_b_in || port_a_out == port_b_out) {
         M5_LOGE("Not enough port");
-        lcd.clear(TFT_RED);
+        if (M5.getBoard() == m5::board_t::board_ArduinoNessoN1) {
+            M5_LOGE("NessoN1: PortA is internal I2C (IOExpander), cannot use as GPIO");
+        }
+        lcd.fillScreen(TFT_RED);
         while (true) {
             m5::utility::delay(10000);
         }
@@ -59,7 +68,7 @@ void setup()
         !Units.add(receiver, port_b_in, port_b_out) ||     // PortB: UnitRF433R
         !Units.begin()) {
         M5_LOGE("Failed to begin");
-        lcd.clear(TFT_RED);
+        lcd.fillScreen(TFT_RED);
         while (true) {
             m5::utility::delay(10000);
         }
@@ -69,70 +78,89 @@ void setup()
     esp_log_level_set("*", ESP_LOG_NONE);  // Disable RMT warning log
 
     //
-    M5_LOGI("M5UnitUnified has been begun");
+    M5_LOGI("M5UnitUnified initialized");
     M5_LOGI("%s", Units.debugInfo().c_str());
-    lcd.fillScreen(TFT_DARKGREEN);
-
     my_id = esp_random();
-    transmitter.setCommunicationIdentifier(my_id);
-    M5.Log.printf("MyID;%X", my_id);
+    static_cast<m5::unit::rf433::M5Codec*>(transmitter.codec().get())->setCommunicationIdentifier(my_id);
+    M5.Log.printf("MyID: %02X\n", my_id);
+
+    // Fill sweep buffer with printable pattern
+    for (uint16_t i = 0; i < 255; ++i) {
+        sweep_buf[i] = 'A' + (i % 26);
+    }
+
+    // Upper half: TX (green), Lower half: RX (cyan)
+    half_h = lcd.height() / 2;
+    lcd.fillRect(0, 0, lcd.width(), half_h, TFT_DARKGREEN);
+    lcd.fillRect(0, half_h, lcd.width(), half_h, TFT_DARKCYAN);
+    lcd.setCursor(0, 0);
+    lcd.setTextSize(1);
+    lcd.printf("TX %02X", my_id);
+    lcd.setCursor(0, half_h);
+    lcd.print("RX");
 }
 
 void loop()
 {
-    using namespace m5::unit::rf433;
-
     M5.update();
-    auto touch = M5.Touch.getDetail();
     Units.update();
 
     // Receive
     if (receiver.updated()) {
         const auto& c = receiver.container();
-        // m5::utility::log::dump(c.data(), c.size(), false);
+        // Container format: ID(1) + Count(1) + Length(1) + Payload(n) (M5Codec)
+        if (c.size() < 3) {
+            receiver.flush();
+            return;
+        }
 
-        auto prot = c[0];  // front is protocol
-        uint32_t id{};
-        uint8_t send_count = latest_send_count;
-        uint32_t offset{1};
+        uint8_t id         = c[0];
+        uint8_t send_count = c[1];
+        uint8_t len        = c[2];
 
-        if (prot & ProtocolIncludeIdentifier) {
-            id = *(uint32_t*)(c.data() + offset);
-            offset += 4;
 #if 0
-            // Skip if self message
-            if (id == my_id) {
-                M5_LOGW("Skip message from me");
-                receiver.flush();
-                return;
-            }
+        // Skip if self message
+        if (id == my_id) {
+            M5_LOGW("Skip message from me");
+            receiver.flush();
+            return;
+        }
 #endif
+
+        // Skip duplicates due to burst transmission
+        if (send_count == latest_send_count) {
+            receiver.flush();
+            return;
         }
-        if (prot & ProtocolIncludeSendCount) {
-            send_count = c[offset++];
-            // Skip duplicates due to burst transmission
-            if (send_count == latest_send_count) {
-                receiver.flush();
-                return;
-            }
-            latest_send_count = send_count;
-        }
-        uint8_t len = c[offset++];
-        M5.Log.printf("RECEIVED: From<%X> Count:%u Len:%u [%s]\n", id, send_count, len,
-                      (const char*)(c.data() + offset));
-        lcd.fillRect(0, 0, lcd.width(), 8, 0);
-        lcd.setCursor(0, 0);
-        lcd.printf("%s", (const char*)(c.data() + offset));
+        latest_send_count = send_count;
+
+        M5.Log.printf("RECEIVED: From<%02X> Count:%u Len:%u [%.*s]\n", id, send_count, len, len,
+                      (const char*)(c.data() + 3));
+        lcd.fillRect(0, half_h + 10, lcd.width(), half_h - 10, TFT_DARKCYAN);
+        lcd.setCursor(0, half_h + 10);
+        lcd.setTextSize(1);
+        lcd.printf("%.*s", len, (const char*)(c.data() + 3));
         receiver.flush();
+        M5.Speaker.tone(2000, 20);
     }
 
-    // Send
-    if (M5.BtnA.wasClicked() || touch.wasClicked()) {
-        auto ptr = msg[msg_index++];
-        msg_index &= 3;
-        M5.Log.printf("Send:[%s] %zu bytes\n", ptr, strlen(ptr) + 1);
-        transmitter.push_back((uint8_t*)ptr, strlen(ptr) + 1 /*include '\0' */);
-        // Send in update()
+    // Send: payload size sweep
+    if (M5.BtnA.wasClicked()) {
+        uint8_t sz        = sweep_sizes[sweep_idx];
+        sweep_buf[sz - 1] = '\0';  // null terminate
+        M5.Log.printf("Send: %u bytes\n", sz);
+        lcd.fillRect(0, 0, lcd.width(), half_h, TFT_BLUE);
+        transmitter.push_back(sweep_buf, sz);
+        transmitter.send();
+        lcd.fillRect(0, 0, lcd.width(), half_h, TFT_DARKGREEN);
+        lcd.setCursor(0, 0);
+        lcd.setTextSize(1);
+        lcd.printf("TX %02X\n%u bytes", my_id, sz);
+        sweep_buf[sz - 1] = 'A' + ((sz - 1) % 26);  // restore pattern
+
+        if (++sweep_idx >= SWEEP_COUNT) {
+            sweep_idx = 0;
+        }
         M5.Speaker.tone(4000, 20);
     }
 }

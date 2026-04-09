@@ -27,6 +27,7 @@ uint8_t latest_send_count{0xFF};
 void setup()
 {
     M5.begin();
+    M5.setTouchButtonHeightByRatio(100);
 
     // The screen shall be in landscape mode
     if (lcd.height() > lcd.width()) {
@@ -44,7 +45,7 @@ void setup()
 
     if (!Units.add(unit, pin_num_gpio_in, pin_num_gpio_out) || !Units.begin()) {
         M5_LOGE("Failed to begin");
-        lcd.clear(TFT_RED);
+        lcd.fillScreen(TFT_RED);
         while (true) {
             m5::utility::delay(10000);
         }
@@ -53,52 +54,50 @@ void setup()
     // TAG specification by ESP_DRAM_LOGx does not work, so use wildcards
     esp_log_level_set("*", ESP_LOG_NONE);  // Disable RMT warning log
 
-    M5_LOGI("M5UnitUnified has been begun");
+    M5_LOGI("M5UnitUnified initialized");
     M5_LOGI("%s", Units.debugInfo().c_str());
     M5_LOGI("ESP-IDF Version %d.%d.%d", (ESP_IDF_VERSION >> 16) & 0xFF, (ESP_IDF_VERSION >> 8) & 0xFF,
             ESP_IDF_VERSION & 0xFF);
 
-    lcd.fillScreen(TFT_DARKGREEN);
+    lcd.fillScreen(TFT_DARKCYAN);
+    lcd.setCursor(0, 0);
+    lcd.setTextSize(1);
+    lcd.print("RX");
 
     M5.Log.printf("getPin: %d,%d\n", pin_num_gpio_in, pin_num_gpio_out);
 }
 
 void loop()
 {
-    using namespace m5::unit::rf433;
-
     M5.update();
-    // auto touch = M5.Touch.getDetail();
     Units.update();
 
     if (unit.updated()) {
         const auto& c = unit.container();
-        // m5::utility::log::dump(c.data(), c.size(), false);
-
-        auto prot = c[0];  // front is protocol
-        uint32_t id{};
-        uint8_t send_count = latest_send_count;
-        uint32_t offset{1};
-
-        if (prot & ProtocolIncludeIdentifier) {
-            id = *(uint32_t*)(c.data() + offset);
-            offset += 4;
+        // Container format: ID(1) + Count(1) + Length(1) + Payload(n)
+        if (c.size() < 3) {
+            unit.flush();
+            return;
         }
-        if (prot & ProtocolIncludeSendCount) {
-            send_count = c[offset++];
-            // Skip duplicates due to burst transmission
-            if (send_count == latest_send_count) {
-                unit.flush();
-                return;
-            }
-            latest_send_count = send_count;
+
+        uint8_t id         = c[0];
+        uint8_t send_count = c[1];
+        uint8_t len        = c[2];
+
+        // Skip duplicates due to burst transmission
+        if (send_count == latest_send_count) {
+            unit.flush();
+            return;
         }
-        uint8_t len = c[offset++];
-        M5.Log.printf("RECEIVED: From<%X> Count:%u Len:%u [%s]\n", id, send_count, len,
-                      (const char*)(c.data() + offset));
-        lcd.fillRect(0, 0, lcd.width(), 8, 0);
-        lcd.setCursor(0, 0);
-        lcd.printf("%s", (const char*)(c.data() + offset));
+        latest_send_count = send_count;
+
+        M5.Log.printf("RECEIVED: From<%02X> Count:%u Len:%u [%.*s]\n", id, send_count, len, len,
+                      (const char*)(c.data() + 3));
+        lcd.fillRect(0, 10, lcd.width(), lcd.height() - 10, TFT_DARKCYAN);
+        lcd.setCursor(0, 10);
+        lcd.setTextSize(1);
+        lcd.printf("%.*s", len, (const char*)(c.data() + 3));
         unit.flush();
+        M5.Speaker.tone(2000, 20);
     }
 }
