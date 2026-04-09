@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -111,17 +111,13 @@ $(function(){initNavTree('structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html',
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:af1605af133b91c79e683c7e89f1f1aac" id="r_af1605af133b91c79e683c7e89f1f1aac"><td class="memItemLeft" align="right" valign="top"><a id="af1605af133b91c79e683c7e89f1f1aac" name="af1605af133b91c79e683c7e89f1f1aac"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>send_in_update</b> {true}</td></tr>
-<tr class="memdesc:af1605af133b91c79e683c7e89f1f1aac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send in update() if true. <br /></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>send_in_update</b> {false}</td></tr>
+<tr class="memdesc:af1605af133b91c79e683c7e89f1f1aac"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, pushed data is automatically sent during <a class="el" href="classm5_1_1unit_1_1_unit_s_y_n115.html#abf17f5d52c33719e16ee3c0460c632b3" title="Update the transmitter unit.">update()</a>. If false, call <a class="el" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a937316f5e750e6b5c0e16faaf00753b8" title="Send force if exists payload.">send()</a> explicitly. <br /></td></tr>
 <tr class="separator:af1605af133b91c79e683c7e89f1f1aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c1b8015790870f82cc38712f3d2cdc4" id="r_a4c1b8015790870f82cc38712f3d2cdc4"><td class="memItemLeft" align="right" valign="top"><a id="a4c1b8015790870f82cc38712f3d2cdc4" name="a4c1b8015790870f82cc38712f3d2cdc4"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>burst_transmission_count</b> {4}</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>burst_transmission_count</b> {2}</td></tr>
 <tr class="memdesc:a4c1b8015790870f82cc38712f3d2cdc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of burst transmission. <br /></td></tr>
 <tr class="separator:a4c1b8015790870f82cc38712f3d2cdc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e0e0406581439ab9c1283c6529e4b17" id="r_a6e0e0406581439ab9c1283c6529e4b17"><td class="memItemLeft" align="right" valign="top"><a id="a6e0e0406581439ab9c1283c6529e4b17" name="a6e0e0406581439ab9c1283c6529e4b17"></a>
-<a class="el" href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">rf433::Protocol</a>&#160;</td><td class="memItemRight" valign="bottom"><b>protocol</b> {<a class="el" href="rmt__item__types_8hpp.html#a12851632cbfc29006739237c6a7c56b8">rf433::ProtocolIncludeSendCount</a> | <a class="el" href="rmt__item__types_8hpp.html#a70bb25d388df6098ae04ebe5ecdb4401">rf433::ProtocolIncludeIdentifier</a>}</td></tr>
-<tr class="memdesc:a6e0e0406581439ab9c1283c6529e4b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protocol. <br /></td></tr>
-<tr class="separator:a6e0e0406581439ab9c1283c6529e4b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Settings for begin. </p>

@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -108,8 +108,8 @@ $(function(){initNavTree('unit___s_y_n115_8hpp_source.html',''); initResizable(t
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define M5_UNIT_RF433_UNIT_SYN115_HPP</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;M5UnitComponent.hpp&gt;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;m5_utility/crc.hpp&gt;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="rmt__item__types_8hpp.html">rmt_item_types.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="m5__codec_8hpp.html">codec/m5_codec.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacem5.html">m5</a> {</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceunit.html">unit</a> {</div>
@@ -120,96 +120,91 @@ $(function(){initNavTree('unit___s_y_n115_8hpp_source.html',''); initResizable(t
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">public</span>:</div>
 <div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">   33</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a> {</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#af1605af133b91c79e683c7e89f1f1aac">   35</a></span>        <span class="keywordtype">bool</span> <a class="code hl_variable" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#af1605af133b91c79e683c7e89f1f1aac">send_in_update</a>{<span class="keyword">true</span>};</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a4c1b8015790870f82cc38712f3d2cdc4">   37</a></span>        uint8_t <a class="code hl_variable" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a4c1b8015790870f82cc38712f3d2cdc4">burst_transmission_count</a>{4};</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a6e0e0406581439ab9c1283c6529e4b17">   39</a></span>        <a class="code hl_typedef" href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">rf433::Protocol</a> <a class="code hl_variable" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a6e0e0406581439ab9c1283c6529e4b17">protocol</a>{rf433::ProtocolIncludeSendCount | rf433::ProtocolIncludeIdentifier};</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    };</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#af1605af133b91c79e683c7e89f1f1aac">   35</a></span>        <span class="keywordtype">bool</span> <a class="code hl_variable" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#af1605af133b91c79e683c7e89f1f1aac">send_in_update</a>{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a4c1b8015790870f82cc38712f3d2cdc4">   37</a></span>        uint8_t <a class="code hl_variable" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a4c1b8015790870f82cc38712f3d2cdc4">burst_transmission_count</a>{2};</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    };</div>
 </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="foldopen" id="foldopen00045" data-start="{" data-end="}">
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#acd4db1477545b010aadb3f99e6fe9dde">   45</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#acd4db1477545b010aadb3f99e6fe9dde">config</a>()</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">return</span> _cfg;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    }</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="foldopen" id="foldopen00043" data-start="{" data-end="}">
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#acd4db1477545b010aadb3f99e6fe9dde">   43</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#acd4db1477545b010aadb3f99e6fe9dde">config</a>()</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">return</span> _cfg;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    }</div>
 </div>
-<div class="foldopen" id="foldopen00050" data-start="{" data-end="}">
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#aab4ab745708b9d5b3d1b694f875b3279">   50</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#aab4ab745708b9d5b3d1b694f875b3279">config</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a>&amp; cfg)</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    {</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        _cfg = cfg;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    }</div>
+<div class="foldopen" id="foldopen00048" data-start="{" data-end="}">
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#aab4ab745708b9d5b3d1b694f875b3279">   48</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#aab4ab745708b9d5b3d1b694f875b3279">config</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a>&amp; cfg)</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        _cfg = cfg;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
 </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_y_n115.html">UnitSYN115</a>() : Component(0x00)</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    {</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">virtual</span> ~UnitSYN115()</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    }</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> begin() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> update(<span class="keyword">const</span> <span class="keywordtype">bool</span> force = <span class="keyword">false</span>) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <a class="code hl_class" href="classm5_1_1unit_1_1_unit_s_y_n115.html">UnitSYN115</a>() : Component(0x00)</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">virtual</span> ~UnitSYN115()</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    }</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a11177ec54914bb92f5423ffffd007a3e">begin</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#abf17f5d52c33719e16ee3c0460c632b3">update</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> force = <span class="keyword">false</span>) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="foldopen" id="foldopen00069" data-start="{" data-end="}">
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#afb86e624e9f0484bce596ee81e96dc55">   69</a></span>    <span class="keyword">inline</span> <a class="code hl_typedef" href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">rf433::communication_identifier_t</a> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#afb86e624e9f0484bce596ee81e96dc55">communicationIdentifier</a>()<span class="keyword"> const</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">return</span> _comm_id;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    }</div>
+<div class="foldopen" id="foldopen00067" data-start="{" data-end="}">
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae16923143fba1f64dd07ab77f06cd4b8">   67</a></span>    <span class="keyword">inline</span> std::shared_ptr&lt;rf433::ProtocolCodec&gt; <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae16923143fba1f64dd07ab77f06cd4b8">codec</a>()</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keywordflow">return</span> _codec;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
 </div>
-<div class="foldopen" id="foldopen00074" data-start="{" data-end="}">
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ad5f3a19dcd5c6c1f2f9306e1f7c4de8b">   74</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ad5f3a19dcd5c6c1f2f9306e1f7c4de8b">setCommunicationIdentifier</a>(<a class="code hl_typedef" href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">rf433::communication_identifier_t</a> <span class="keywordtype">id</span>)</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    {</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        _comm_id = id;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a61d5c484efe699417f84a79d4f41be51">push_back</a>(<span class="keyword">const</span> uint8_t* data, <span class="keyword">const</span> uint32_t len);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a937316f5e750e6b5c0e16faaf00753b8">send</a>(<span class="keyword">const</span> uint8_t burst_transmission_count = 0);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="foldopen" id="foldopen00094" data-start="{" data-end="}">
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a9dfdd2ec4ef686b087677b0812abc452">   94</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a9dfdd2ec4ef686b087677b0812abc452">clear</a>()</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        _payload.clear();</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        _payload_size = 0;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    }</div>
 </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a61d5c484efe699417f84a79d4f41be51">push_back</a>(<span class="keyword">const</span> uint8_t* data, <span class="keyword">const</span> uint32_t len);</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae8240104f39eda031ddbac94101e0b76">send</a>(<span class="keyword">const</span> uint8_t burst_transmission_count = 4);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="foldopen" id="foldopen00099" data-start="{" data-end="}">
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a9dfdd2ec4ef686b087677b0812abc452">   99</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#a9dfdd2ec4ef686b087677b0812abc452">clear</a>()</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    {</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        clear_rmt_buffer();</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    }</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="foldopen" id="foldopen00101" data-start="{" data-end="}">
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ab3325cd7544cd6e9de22636f6af92e57">  101</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ab3325cd7544cd6e9de22636f6af92e57">setCodec</a>(std::shared_ptr&lt;rf433::ProtocolCodec&gt; <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae16923143fba1f64dd07ab77f06cd4b8">codec</a>)</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        _codec = <a class="code hl_function" href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae16923143fba1f64dd07ab77f06cd4b8">codec</a>;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    }</div>
 </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordtype">void</span> clear_rmt_buffer();</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    TickType_t estimate_tx_timeout_ticks(<span class="keyword">const</span> uint32_t margin_ms = 10) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    m5::utility::CRC8_Checksum _crc8{};</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    uint16_t _payload_size{};</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    rf433::item_container_type _rmt_buffer{};</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    rf433::communication_identifier_t _comm_id{};</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="keywordtype">bool</span> _closing{};</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    uint8_t _send_count{};  <span class="comment">// Transmission Counter</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    config_t _cfg{};</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>};</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>}  <span class="comment">// namespace unit</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>}  <span class="comment">// namespace m5</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    TickType_t estimate_tx_timeout_ticks(<span class="keyword">const</span> <a class="code hl_typedef" href="rmt__item__types_8hpp.html#af7a42ef74f70e0c5b65cb52329f5a22b">rf433::item_container_type</a>&amp; items, <span class="keyword">const</span> uint32_t margin_ms = 10) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    std::shared_ptr&lt;rf433::ProtocolCodec&gt; _codec{std::make_shared&lt;rf433::M5Codec&gt;()};</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    std::vector&lt;uint8_t&gt; _payload{};</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    uint16_t _payload_size{};</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    config_t _cfg{};</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>};</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>}  <span class="comment">// namespace unit</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>}  <span class="comment">// namespace m5</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html">m5::unit::UnitSYN115</a></div><div class="ttdoc">SYN115 unit.</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_a61d5c484efe699417f84a79d4f41be51"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#a61d5c484efe699417f84a79d4f41be51">m5::unit::UnitSYN115::push_back</a></div><div class="ttdeci">bool push_back(const uint8_t *data, const uint32_t len)</div><div class="ttdef"><b>Definition</b> unit_SYN115.cpp:88</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_a9dfdd2ec4ef686b087677b0812abc452"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#a9dfdd2ec4ef686b087677b0812abc452">m5::unit::UnitSYN115::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Clear inner buffer.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:99</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_aab4ab745708b9d5b3d1b694f875b3279"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#aab4ab745708b9d5b3d1b694f875b3279">m5::unit::UnitSYN115::config</a></div><div class="ttdeci">void config(const config_t &amp;cfg)</div><div class="ttdoc">Set the configration.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:50</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_acd4db1477545b010aadb3f99e6fe9dde"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#acd4db1477545b010aadb3f99e6fe9dde">m5::unit::UnitSYN115::config</a></div><div class="ttdeci">config_t config()</div><div class="ttdoc">Gets the configration.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:45</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_ad5f3a19dcd5c6c1f2f9306e1f7c4de8b"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#ad5f3a19dcd5c6c1f2f9306e1f7c4de8b">m5::unit::UnitSYN115::setCommunicationIdentifier</a></div><div class="ttdeci">void setCommunicationIdentifier(rf433::communication_identifier_t id)</div><div class="ttdoc">Set communication identifier.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:74</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_ae8240104f39eda031ddbac94101e0b76"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae8240104f39eda031ddbac94101e0b76">m5::unit::UnitSYN115::send</a></div><div class="ttdeci">bool send(const uint8_t burst_transmission_count=4)</div><div class="ttdoc">Send force if exists payload.</div><div class="ttdef"><b>Definition</b> unit_SYN115.cpp:106</div></div>
-<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_afb86e624e9f0484bce596ee81e96dc55"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#afb86e624e9f0484bce596ee81e96dc55">m5::unit::UnitSYN115::communicationIdentifier</a></div><div class="ttdeci">rf433::communication_identifier_t communicationIdentifier() const</div><div class="ttdoc">Get communication identifier.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:69</div></div>
-<div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5stack.</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_a11177ec54914bb92f5423ffffd007a3e"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#a11177ec54914bb92f5423ffffd007a3e">m5::unit::UnitSYN115::begin</a></div><div class="ttdeci">virtual bool begin() override</div><div class="ttdoc">Initialize the transmitter unit.</div><div class="ttdef"><b>Definition</b> unit_SYN115.cpp:36</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_a61d5c484efe699417f84a79d4f41be51"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#a61d5c484efe699417f84a79d4f41be51">m5::unit::UnitSYN115::push_back</a></div><div class="ttdeci">bool push_back(const uint8_t *data, const uint32_t len)</div><div class="ttdoc">Push back data to payload.</div><div class="ttdef"><b>Definition</b> unit_SYN115.cpp:84</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_a937316f5e750e6b5c0e16faaf00753b8"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#a937316f5e750e6b5c0e16faaf00753b8">m5::unit::UnitSYN115::send</a></div><div class="ttdeci">bool send(const uint8_t burst_transmission_count=0)</div><div class="ttdoc">Send force if exists payload.</div><div class="ttdef"><b>Definition</b> unit_SYN115.cpp:99</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_a9dfdd2ec4ef686b087677b0812abc452"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#a9dfdd2ec4ef686b087677b0812abc452">m5::unit::UnitSYN115::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">Clear inner buffer.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:94</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_aab4ab745708b9d5b3d1b694f875b3279"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#aab4ab745708b9d5b3d1b694f875b3279">m5::unit::UnitSYN115::config</a></div><div class="ttdeci">void config(const config_t &amp;cfg)</div><div class="ttdoc">Set the configuration.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:48</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_ab3325cd7544cd6e9de22636f6af92e57"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#ab3325cd7544cd6e9de22636f6af92e57">m5::unit::UnitSYN115::setCodec</a></div><div class="ttdeci">void setCodec(std::shared_ptr&lt; rf433::ProtocolCodec &gt; codec)</div><div class="ttdoc">Set protocol codec (default: M5Codec)</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:101</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_abf17f5d52c33719e16ee3c0460c632b3"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#abf17f5d52c33719e16ee3c0460c632b3">m5::unit::UnitSYN115::update</a></div><div class="ttdeci">virtual void update(const bool force=false) override</div><div class="ttdoc">Update the transmitter unit.</div><div class="ttdef"><b>Definition</b> unit_SYN115.cpp:74</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_acd4db1477545b010aadb3f99e6fe9dde"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#acd4db1477545b010aadb3f99e6fe9dde">m5::unit::UnitSYN115::config</a></div><div class="ttdeci">config_t config()</div><div class="ttdoc">Gets the configuration.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:43</div></div>
+<div class="ttc" id="aclassm5_1_1unit_1_1_unit_s_y_n115_html_ae16923143fba1f64dd07ab77f06cd4b8"><div class="ttname"><a href="classm5_1_1unit_1_1_unit_s_y_n115.html#ae16923143fba1f64dd07ab77f06cd4b8">m5::unit::UnitSYN115::codec</a></div><div class="ttdeci">std::shared_ptr&lt; rf433::ProtocolCodec &gt; codec()</div><div class="ttdoc">Get codec (for codec-specific configuration)</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:67</div></div>
+<div class="ttc" id="am5__codec_8hpp_html"><div class="ttname"><a href="m5__codec_8hpp.html">m5_codec.hpp</a></div><div class="ttdoc">M5Unit-RF433 original protocol codec.</div></div>
+<div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5Stack.</div></div>
 <div class="ttc" id="anamespaceunit_html"><div class="ttname"><a href="namespaceunit.html">unit</a></div><div class="ttdoc">Unit-related namespace.</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html"><div class="ttname"><a href="rmt__item__types_8hpp.html">rmt_item_types.hpp</a></div><div class="ttdoc">RMT releated definition and function for RF433.</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html_a7f77b4abbf284f855e40d398cc112291"><div class="ttname"><a href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">m5::unit::rf433::communication_identifier_t</a></div><div class="ttdeci">uint32_t communication_identifier_t</div><div class="ttdoc">Communication identifier.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:29</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html_abedf3c0d1672eb8281008fc3133e73a2"><div class="ttname"><a href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">m5::unit::rf433::Protocol</a></div><div class="ttdeci">uint8_t Protocol</div><div class="ttdoc">Protocol type.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:33</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_af7a42ef74f70e0c5b65cb52329f5a22b"><div class="ttname"><a href="rmt__item__types_8hpp.html#af7a42ef74f70e0c5b65cb52329f5a22b">m5::unit::rf433::item_container_type</a></div><div class="ttdeci">std::vector&lt; gpio::m5_rmt_item_t &gt; item_container_type</div><div class="ttdoc">Item container.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:28</div></div>
 <div class="ttc" id="astructm5_1_1unit_1_1_unit_s_y_n115_1_1config__t_html"><div class="ttname"><a href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">m5::unit::UnitSYN115::config_t</a></div><div class="ttdoc">Settings for begin.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:33</div></div>
 <div class="ttc" id="astructm5_1_1unit_1_1_unit_s_y_n115_1_1config__t_html_a4c1b8015790870f82cc38712f3d2cdc4"><div class="ttname"><a href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a4c1b8015790870f82cc38712f3d2cdc4">m5::unit::UnitSYN115::config_t::burst_transmission_count</a></div><div class="ttdeci">uint8_t burst_transmission_count</div><div class="ttdoc">Count of burst transmission.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:37</div></div>
-<div class="ttc" id="astructm5_1_1unit_1_1_unit_s_y_n115_1_1config__t_html_a6e0e0406581439ab9c1283c6529e4b17"><div class="ttname"><a href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a6e0e0406581439ab9c1283c6529e4b17">m5::unit::UnitSYN115::config_t::protocol</a></div><div class="ttdeci">rf433::Protocol protocol</div><div class="ttdoc">Protocol.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:39</div></div>
-<div class="ttc" id="astructm5_1_1unit_1_1_unit_s_y_n115_1_1config__t_html_af1605af133b91c79e683c7e89f1f1aac"><div class="ttname"><a href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#af1605af133b91c79e683c7e89f1f1aac">m5::unit::UnitSYN115::config_t::send_in_update</a></div><div class="ttdeci">bool send_in_update</div><div class="ttdoc">Send in update() if true.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:35</div></div>
+<div class="ttc" id="astructm5_1_1unit_1_1_unit_s_y_n115_1_1config__t_html_af1605af133b91c79e683c7e89f1f1aac"><div class="ttname"><a href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#af1605af133b91c79e683c7e89f1f1aac">m5::unit::UnitSYN115::config_t::send_in_update</a></div><div class="ttdeci">bool send_in_update</div><div class="ttdoc">If true, pushed data is automatically sent during update(). If false, call send() explicitly.</div><div class="ttdef"><b>Definition</b> unit_SYN115.hpp:35</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

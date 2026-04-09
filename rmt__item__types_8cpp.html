@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -103,7 +103,7 @@ $(function(){initNavTree('rmt__item__types_8cpp.html',''); initResizable(true); 
 </div><!--header-->
 <div class="contents">
 
-<p>RMT releated definition and function for RF433.  
+<p>RMT related definition and function for RF433.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="rmt__item__types_8hpp_source.html">rmt_item_types.hpp</a>&quot;</code><br />
 <code>#include &lt;M5Utility.h&gt;</code><br />
@@ -111,7 +111,7 @@ $(function(){initNavTree('rmt__item__types_8cpp.html',''); initResizable(true); 
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacem5.html">m5</a></td></tr>
-<tr class="memdesc:namespacem5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top level namespace of M5stack. <br /></td></tr>
+<tr class="memdesc:namespacem5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top level namespace of M5Stack. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -122,12 +122,9 @@ Functions</h2></td></tr>
 <tr class="memitem:afd5fbfe00ec8a17bb22b37d1a0cac1de" id="r_afd5fbfe00ec8a17bb22b37d1a0cac1de"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd5fbfe00ec8a17bb22b37d1a0cac1de">m5::unit::rf433::decodeManchester</a> (uint8_t *buf, const uint16_t buf_size, const m5::unit::gpio::m5_rmt_item_t *data, const uint32_t num, const bool MSB=true)</td></tr>
 <tr class="memdesc:afd5fbfe00ec8a17bb22b37d1a0cac1de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode manchester.  <br /></td></tr>
 <tr class="separator:afd5fbfe00ec8a17bb22b37d1a0cac1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd76e67154031f42b62a7342f823899f" id="r_acd76e67154031f42b62a7342f823899f"><td class="memItemLeft" align="right" valign="top"><a id="acd76e67154031f42b62a7342f823899f" name="acd76e67154031f42b62a7342f823899f"></a>
-<a class="el" href="rmt__item__types_8hpp.html#a78b59b2f127c452997e557f0123dca81">container_type</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::decode2</b> (const m5::unit::gpio::m5_rmt_item_t *items, const uint32_t num, const bool manchester, const bool MSB)</td></tr>
-<tr class="separator:acd76e67154031f42b62a7342f823899f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>RMT releated definition and function for RF433. </p>
+<div class="textblock"><p>RMT related definition and function for RF433. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="afd5fbfe00ec8a17bb22b37d1a0cac1de" name="afd5fbfe00ec8a17bb22b37d1a0cac1de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd5fbfe00ec8a17bb22b37d1a0cac1de">&#9670;&#160;</a></span>decodeManchester()</h2>
@@ -166,9 +163,10 @@ Functions</h2></td></tr>
 <p>Decode manchester. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">buf</td><td>Output buffer @paran buf_sizr Output buffer size </td></tr>
+    <tr><td class="paramname">buf</td><td>Output buffer </td></tr>
+    <tr><td class="paramname">buf_size</td><td>Output buffer size </td></tr>
     <tr><td class="paramname">data</td><td>RMT data (exclude SOF) </td></tr>
-    <tr><td class="paramname">Number</td><td>of the RMT items </td></tr>
+    <tr><td class="paramname">num</td><td>Number of the RMT items </td></tr>
     <tr><td class="paramname">MSB</td><td>Process from MSB if true </td></tr>
   </table>
   </dd>
@@ -205,7 +203,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>Input buffer </td></tr>
-    <tr><td class="paramname">Length</td><td>of input buffer </td></tr>
+    <tr><td class="paramname">len</td><td>Length of input buffer </td></tr>
     <tr><td class="paramname">MSB</td><td>Process from MSB if true </td></tr>
   </table>
   </dd>

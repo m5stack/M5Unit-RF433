@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -104,8 +104,8 @@ $(function(){initNavTree('rmt__item__types_8hpp_source.html',''); initResizable(
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * SPDX-License-Identifier: MIT</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#ifndef M5_UNIT_RF433_RNT_ITEM_TYPES_HPP</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define M5_UNIT_RF433_RNT_ITEM_TYPES_HPP</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#ifndef M5_UNIT_RF433_RMT_ITEM_TYPES_HPP</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define M5_UNIT_RF433_RMT_ITEM_TYPES_HPP</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;M5UnitComponent.hpp&gt;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
@@ -121,28 +121,55 @@ $(function(){initNavTree('rmt__item__types_8hpp_source.html',''); initResizable(
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a78b59b2f127c452997e557f0123dca81">   27</a></span><span class="keyword">using </span><a class="code hl_typedef" href="rmt__item__types_8hpp.html#a78b59b2f127c452997e557f0123dca81">container_type</a>             = std::vector&lt;uint8_t&gt;;              </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#af7a42ef74f70e0c5b65cb52329f5a22b">   28</a></span><span class="keyword">using </span><a class="code hl_typedef" href="rmt__item__types_8hpp.html#af7a42ef74f70e0c5b65cb52329f5a22b">item_container_type</a>        = std::vector&lt;gpio::m5_rmt_item_t&gt;;  </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">   29</a></span><span class="keyword">using </span><a class="code hl_typedef" href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">communication_identifier_t</a> = uint32_t;                          </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a126f6d93bb2aea6a2399520288230b52">   29</a></span><span class="keyword">using </span><a class="code hl_typedef" href="rmt__item__types_8hpp.html#a126f6d93bb2aea6a2399520288230b52">communication_identifier_t</a> = uint8_t;                           </div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">   33</a></span><span class="keyword">using </span><a class="code hl_typedef" href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a> = uint8_t;                            </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a12851632cbfc29006739237c6a7c56b8">   34</a></span><span class="keyword">constexpr</span> <a class="code hl_typedef" href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a> <a class="code hl_variable" href="rmt__item__types_8hpp.html#a12851632cbfc29006739237c6a7c56b8">ProtocolIncludeSendCount</a>{0x01};   </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a70bb25d388df6098ae04ebe5ecdb4401">   35</a></span><span class="keyword">constexpr</span> <a class="code hl_typedef" href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a> <a class="code hl_variable" href="rmt__item__types_8hpp.html#a70bb25d388df6098ae04ebe5ecdb4401">ProtocolIncludeIdentifier</a>{0x02};  </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>item_container_type encodeManchester(<span class="keyword">const</span> uint8_t* data, <span class="keyword">const</span> uint32_t len, <span class="keyword">const</span> <span class="keywordtype">bool</span> MSB = <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>uint16_t decodeManchester(uint8_t* buf, <span class="keyword">const</span> uint16_t buf_size, <span class="keyword">const</span> m5::unit::gpio::m5_rmt_item_t* data,</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                          <span class="keyword">const</span> uint32_t num, <span class="keyword">const</span> <span class="keywordtype">bool</span> MSB = <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>}  <span class="comment">// namespace rf433</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>}  <span class="comment">// namespace unit</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>}  <span class="comment">// namespace m5</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5stack.</div></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#aea0e019098367431997447b81408d9b6">   32</a></span><span class="keyword">constexpr</span> uint8_t <a class="code hl_variable" href="rmt__item__types_8hpp.html#aea0e019098367431997447b81408d9b6">ProtocolOverhead</a> = 4;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#if defined(M5_UNIT_UNIFIED_USING_RMT_V2)</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">constexpr</span> uint16_t <a class="code hl_variable" href="rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8">RmtRxMaxItems</a> = 4096;  </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#elif defined(CONFIG_IDF_TARGET_ESP32S3)</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">constexpr</span> uint16_t <a class="code hl_variable" href="rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8">RmtRxMaxItems</a> = 1 * 48;  </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8">   51</a></span><span class="keyword">constexpr</span> uint16_t <a class="code hl_variable" href="rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8">RmtRxMaxItems</a> = 6 * 64;  </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a5f39c6faf77ec83a9e1001900523d451">   69</a></span><span class="keyword">constexpr</span> uint8_t <a class="code hl_variable" href="rmt__item__types_8hpp.html#a5f39c6faf77ec83a9e1001900523d451">MaxPayloadSize</a> =</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">#if defined(M5_UNIT_UNIFIED_USING_RMT_V2)</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    255;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="preprocessor">#elif defined(CONFIG_IDF_TARGET_ESP32S3)</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="comment">// ESP32-S3 uses mem_blocks=1 with threshold ISR wrapping;</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="comment">// theoretical limit depends on ISR throughput, use ESP32 equivalent</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    43;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">static_cast&lt;</span>uint8_t<span class="keyword">&gt;</span>((<a class="code hl_variable" href="rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8">RmtRxMaxItems</a> - 1 <span class="comment">/*SOF*/</span>) / 8 - ProtocolOverhead);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="foldopen" id="foldopen00085" data-start="{" data-end="}">
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="rmt__item__types_8hpp.html#a6e64158ea9c32fbe8e32c0100dc6fbff">   85</a></span><span class="keyword">constexpr</span> uint32_t <a class="code hl_function" href="rmt__item__types_8hpp.html#a6e64158ea9c32fbe8e32c0100dc6fbff">calculateRingBufferSize</a>(<span class="keyword">const</span> uint32_t payload_size)</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>{</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="comment">// Frame: SOF(1 item) + (overhead + payload) * 8 Manchester items per byte</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keywordflow">return</span> (1 <span class="comment">/*SOF*/</span> + (<a class="code hl_variable" href="rmt__item__types_8hpp.html#aea0e019098367431997447b81408d9b6">ProtocolOverhead</a> + payload_size) * 8) * <span class="keyword">sizeof</span>(m5::unit::gpio::m5_rmt_item_t) +</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>           2 <span class="comment">/*length prefix*/</span>;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}</div>
+</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>item_container_type encodeManchester(<span class="keyword">const</span> uint8_t* data, <span class="keyword">const</span> uint32_t len, <span class="keyword">const</span> <span class="keywordtype">bool</span> MSB = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>uint16_t decodeManchester(uint8_t* buf, <span class="keyword">const</span> uint16_t buf_size, <span class="keyword">const</span> m5::unit::gpio::m5_rmt_item_t* data,</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                          <span class="keyword">const</span> uint32_t num, <span class="keyword">const</span> <span class="keywordtype">bool</span> MSB = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>}  <span class="comment">// namespace rf433</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>}  <span class="comment">// namespace unit</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}  <span class="comment">// namespace m5</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="anamespacem5_html"><div class="ttname"><a href="namespacem5.html">m5</a></div><div class="ttdoc">Top level namespace of M5Stack.</div></div>
 <div class="ttc" id="anamespaceunit_html"><div class="ttname"><a href="namespaceunit.html">unit</a></div><div class="ttdoc">Unit-related namespace.</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html_a12851632cbfc29006739237c6a7c56b8"><div class="ttname"><a href="rmt__item__types_8hpp.html#a12851632cbfc29006739237c6a7c56b8">m5::unit::rf433::ProtocolIncludeSendCount</a></div><div class="ttdeci">constexpr Protocol ProtocolIncludeSendCount</div><div class="ttdoc">Include send count.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:34</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html_a70bb25d388df6098ae04ebe5ecdb4401"><div class="ttname"><a href="rmt__item__types_8hpp.html#a70bb25d388df6098ae04ebe5ecdb4401">m5::unit::rf433::ProtocolIncludeIdentifier</a></div><div class="ttdeci">constexpr Protocol ProtocolIncludeIdentifier</div><div class="ttdoc">Include identifier.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:35</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_a126f6d93bb2aea6a2399520288230b52"><div class="ttname"><a href="rmt__item__types_8hpp.html#a126f6d93bb2aea6a2399520288230b52">m5::unit::rf433::communication_identifier_t</a></div><div class="ttdeci">uint8_t communication_identifier_t</div><div class="ttdoc">Communication identifier (0-255)</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:29</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_a5f39c6faf77ec83a9e1001900523d451"><div class="ttname"><a href="rmt__item__types_8hpp.html#a5f39c6faf77ec83a9e1001900523d451">m5::unit::rf433::MaxPayloadSize</a></div><div class="ttdeci">constexpr uint8_t MaxPayloadSize</div><div class="ttdoc">Theoretical maximum payload size in bytes for the current platform.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:69</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_a6e64158ea9c32fbe8e32c0100dc6fbff"><div class="ttname"><a href="rmt__item__types_8hpp.html#a6e64158ea9c32fbe8e32c0100dc6fbff">m5::unit::rf433::calculateRingBufferSize</a></div><div class="ttdeci">constexpr uint32_t calculateRingBufferSize(const uint32_t payload_size)</div><div class="ttdoc">Calculate the minimum ring buffer size required to receive the given payload size.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:85</div></div>
 <div class="ttc" id="armt__item__types_8hpp_html_a78b59b2f127c452997e557f0123dca81"><div class="ttname"><a href="rmt__item__types_8hpp.html#a78b59b2f127c452997e557f0123dca81">m5::unit::rf433::container_type</a></div><div class="ttdeci">std::vector&lt; uint8_t &gt; container_type</div><div class="ttdoc">Container.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:27</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html_a7f77b4abbf284f855e40d398cc112291"><div class="ttname"><a href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">m5::unit::rf433::communication_identifier_t</a></div><div class="ttdeci">uint32_t communication_identifier_t</div><div class="ttdoc">Communication identifier.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:29</div></div>
-<div class="ttc" id="armt__item__types_8hpp_html_abedf3c0d1672eb8281008fc3133e73a2"><div class="ttname"><a href="rmt__item__types_8hpp.html#abedf3c0d1672eb8281008fc3133e73a2">m5::unit::rf433::Protocol</a></div><div class="ttdeci">uint8_t Protocol</div><div class="ttdoc">Protocol type.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:33</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_adfab107f20443d36427aa94aa6ab20d8"><div class="ttname"><a href="rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a></div><div class="ttdeci">constexpr uint16_t RmtRxMaxItems</div><div class="ttdoc">Maximum RMT items receivable in a single frame per platform.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:51</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_aea0e019098367431997447b81408d9b6"><div class="ttname"><a href="rmt__item__types_8hpp.html#aea0e019098367431997447b81408d9b6">m5::unit::rf433::ProtocolOverhead</a></div><div class="ttdeci">constexpr uint8_t ProtocolOverhead</div><div class="ttdoc">Protocol overhead in bytes: CRC8(1) + ID(1) + Count(1) + Length(1) = 4.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:32</div></div>
 <div class="ttc" id="armt__item__types_8hpp_html_af7a42ef74f70e0c5b65cb52329f5a22b"><div class="ttname"><a href="rmt__item__types_8hpp.html#af7a42ef74f70e0c5b65cb52329f5a22b">m5::unit::rf433::item_container_type</a></div><div class="ttdeci">std::vector&lt; gpio::m5_rmt_item_t &gt; item_container_type</div><div class="ttdoc">Item container.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:28</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

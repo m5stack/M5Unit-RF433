@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -100,7 +100,6 @@ $(function(){initNavTree('classm5_1_1unit_1_1_unit_s_y_n115.html',''); initResiz
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classm5_1_1unit_1_1_unit_s_y_n115-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">m5::unit::UnitSYN115 Class Reference</div></div>
 </div><!--header-->
@@ -127,55 +126,45 @@ Classes</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a11177ec54914bb92f5423ffffd007a3e" id="r_a11177ec54914bb92f5423ffffd007a3e"><td class="memItemLeft" align="right" valign="top"><a id="a11177ec54914bb92f5423ffffd007a3e" name="a11177ec54914bb92f5423ffffd007a3e"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () override</td></tr>
+<tr class="memdesc:a11177ec54914bb92f5423ffffd007a3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the transmitter unit. <br /></td></tr>
 <tr class="separator:a11177ec54914bb92f5423ffffd007a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf17f5d52c33719e16ee3c0460c632b3" id="r_abf17f5d52c33719e16ee3c0460c632b3"><td class="memItemLeft" align="right" valign="top"><a id="abf17f5d52c33719e16ee3c0460c632b3" name="abf17f5d52c33719e16ee3c0460c632b3"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (const bool force=false) override</td></tr>
+<tr class="memdesc:abf17f5d52c33719e16ee3c0460c632b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the transmitter unit. <br /></td></tr>
 <tr class="separator:abf17f5d52c33719e16ee3c0460c632b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae16923143fba1f64dd07ab77f06cd4b8" id="r_ae16923143fba1f64dd07ab77f06cd4b8"><td class="memItemLeft" align="right" valign="top"><a id="ae16923143fba1f64dd07ab77f06cd4b8" name="ae16923143fba1f64dd07ab77f06cd4b8"></a>
+std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>codec</b> ()</td></tr>
+<tr class="memdesc:ae16923143fba1f64dd07ab77f06cd4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get codec (for codec-specific configuration) <br /></td></tr>
+<tr class="separator:ae16923143fba1f64dd07ab77f06cd4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61d5c484efe699417f84a79d4f41be51" id="r_a61d5c484efe699417f84a79d4f41be51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61d5c484efe699417f84a79d4f41be51">push_back</a> (const uint8_t *data, const uint32_t len)</td></tr>
+<tr class="memdesc:a61d5c484efe699417f84a79d4f41be51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push back data to payload.  <br /></td></tr>
 <tr class="separator:a61d5c484efe699417f84a79d4f41be51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8240104f39eda031ddbac94101e0b76" id="r_ae8240104f39eda031ddbac94101e0b76"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8240104f39eda031ddbac94101e0b76">send</a> (const uint8_t burst_transmission_count=4)</td></tr>
-<tr class="memdesc:ae8240104f39eda031ddbac94101e0b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send force if exists payload.  <br /></td></tr>
-<tr class="separator:ae8240104f39eda031ddbac94101e0b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a937316f5e750e6b5c0e16faaf00753b8" id="r_a937316f5e750e6b5c0e16faaf00753b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a937316f5e750e6b5c0e16faaf00753b8">send</a> (const uint8_t burst_transmission_count=0)</td></tr>
+<tr class="memdesc:a937316f5e750e6b5c0e16faaf00753b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send force if exists payload.  <br /></td></tr>
+<tr class="separator:a937316f5e750e6b5c0e16faaf00753b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9dfdd2ec4ef686b087677b0812abc452" id="r_a9dfdd2ec4ef686b087677b0812abc452"><td class="memItemLeft" align="right" valign="top"><a id="a9dfdd2ec4ef686b087677b0812abc452" name="a9dfdd2ec4ef686b087677b0812abc452"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="memdesc:a9dfdd2ec4ef686b087677b0812abc452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear inner buffer. <br /></td></tr>
 <tr class="separator:a9dfdd2ec4ef686b087677b0812abc452"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3325cd7544cd6e9de22636f6af92e57" id="r_ab3325cd7544cd6e9de22636f6af92e57"><td class="memItemLeft" align="right" valign="top"><a id="ab3325cd7544cd6e9de22636f6af92e57" name="ab3325cd7544cd6e9de22636f6af92e57"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCodec</b> (std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &gt; <a class="el" href="#ae16923143fba1f64dd07ab77f06cd4b8">codec</a>)</td></tr>
+<tr class="memdesc:ab3325cd7544cd6e9de22636f6af92e57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set protocol codec (default: M5Codec) <br /></td></tr>
+<tr class="separator:ab3325cd7544cd6e9de22636f6af92e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Configuration for begin</div></td></tr>
 <tr class="memitem:acd4db1477545b010aadb3f99e6fe9dde" id="r_acd4db1477545b010aadb3f99e6fe9dde"><td class="memItemLeft" align="right" valign="top"><a id="acd4db1477545b010aadb3f99e6fe9dde" name="acd4db1477545b010aadb3f99e6fe9dde"></a>
 <a class="el" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> ()</td></tr>
-<tr class="memdesc:acd4db1477545b010aadb3f99e6fe9dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configration. <br /></td></tr>
+<tr class="memdesc:acd4db1477545b010aadb3f99e6fe9dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configuration. <br /></td></tr>
 <tr class="separator:acd4db1477545b010aadb3f99e6fe9dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab4ab745708b9d5b3d1b694f875b3279" id="r_aab4ab745708b9d5b3d1b694f875b3279"><td class="memItemLeft" align="right" valign="top"><a id="aab4ab745708b9d5b3d1b694f875b3279" name="aab4ab745708b9d5b3d1b694f875b3279"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> (const <a class="el" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a> &amp;cfg)</td></tr>
-<tr class="memdesc:aab4ab745708b9d5b3d1b694f875b3279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configration. <br /></td></tr>
+<tr class="memdesc:aab4ab745708b9d5b3d1b694f875b3279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configuration. <br /></td></tr>
 <tr class="separator:aab4ab745708b9d5b3d1b694f875b3279"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Communication identifier</div></td></tr>
-<tr class="memitem:afb86e624e9f0484bce596ee81e96dc55" id="r_afb86e624e9f0484bce596ee81e96dc55"><td class="memItemLeft" align="right" valign="top"><a id="afb86e624e9f0484bce596ee81e96dc55" name="afb86e624e9f0484bce596ee81e96dc55"></a>
-<a class="el" href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">rf433::communication_identifier_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>communicationIdentifier</b> () const</td></tr>
-<tr class="memdesc:afb86e624e9f0484bce596ee81e96dc55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get communication identifier. <br /></td></tr>
-<tr class="separator:afb86e624e9f0484bce596ee81e96dc55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5f3a19dcd5c6c1f2f9306e1f7c4de8b" id="r_ad5f3a19dcd5c6c1f2f9306e1f7c4de8b"><td class="memItemLeft" align="right" valign="top"><a id="ad5f3a19dcd5c6c1f2f9306e1f7c4de8b" name="ad5f3a19dcd5c6c1f2f9306e1f7c4de8b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCommunicationIdentifier</b> (<a class="el" href="rmt__item__types_8hpp.html#a7f77b4abbf284f855e40d398cc112291">rf433::communication_identifier_t</a> id)</td></tr>
-<tr class="memdesc:ad5f3a19dcd5c6c1f2f9306e1f7c4de8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set communication identifier. <br /></td></tr>
-<tr class="separator:ad5f3a19dcd5c6c1f2f9306e1f7c4de8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:af1594f212e25e2401aac5742f2babf06" id="r_af1594f212e25e2401aac5742f2babf06"><td class="memItemLeft" align="right" valign="top"><a id="af1594f212e25e2401aac5742f2babf06" name="af1594f212e25e2401aac5742f2babf06"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_rmt_buffer</b> ()</td></tr>
-<tr class="separator:af1594f212e25e2401aac5742f2babf06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a141a2accc3c4c37551c4b2999f6770e6" id="r_a141a2accc3c4c37551c4b2999f6770e6"><td class="memItemLeft" align="right" valign="top"><a id="a141a2accc3c4c37551c4b2999f6770e6" name="a141a2accc3c4c37551c4b2999f6770e6"></a>
-TickType_t&#160;</td><td class="memItemRight" valign="bottom"><b>estimate_tx_timeout_ticks</b> (const uint32_t margin_ms=10) const</td></tr>
-<tr class="separator:a141a2accc3c4c37551c4b2999f6770e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a8f36b291d59dc5299e4f1cf99875e237" id="r_a8f36b291d59dc5299e4f1cf99875e237"><td class="memItemLeft" align="right" valign="top"><a id="a8f36b291d59dc5299e4f1cf99875e237" name="a8f36b291d59dc5299e4f1cf99875e237"></a>
-m5::utility::CRC8_Checksum&#160;</td><td class="memItemRight" valign="bottom"><b>_crc8</b> {}</td></tr>
-<tr class="separator:a8f36b291d59dc5299e4f1cf99875e237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e68d535b4c2950d90ee24a029a3eea0" id="r_a6e68d535b4c2950d90ee24a029a3eea0"><td class="memItemLeft" align="right" valign="top"><a id="a6e68d535b4c2950d90ee24a029a3eea0" name="a6e68d535b4c2950d90ee24a029a3eea0"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_payload_size</b> {}</td></tr>
-<tr class="separator:a6e68d535b4c2950d90ee24a029a3eea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97ee86515c07443edeab9e54d52b0b8c" id="r_a97ee86515c07443edeab9e54d52b0b8c"><td class="memItemLeft" align="right" valign="top"><a id="a97ee86515c07443edeab9e54d52b0b8c" name="a97ee86515c07443edeab9e54d52b0b8c"></a>
+TickType_t&#160;</td><td class="memItemRight" valign="bottom"><b>estimate_tx_timeout_ticks</b> (const <a class="el" href="rmt__item__types_8hpp.html#af7a42ef74f70e0c5b65cb52329f5a22b">rf433::item_container_type</a> &amp;items, const uint32_t margin_ms=10) const</td></tr>
+<tr class="separator:a97ee86515c07443edeab9e54d52b0b8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>SYN115 unit. </p>
@@ -199,20 +188,23 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_payload_size</b>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Push back data to payload. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Push</td><td>back to payload </td></tr>
     <tr><td class="paramname">data</td><td>Input data buffer </td></tr>
     <tr><td class="paramname">len</td><td>Length of data buffer </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Total payload size is limited to 255 bytes. The receiver side has a stricter limit based on RMT hardware (<a class="el" href="rmt__item__types_8hpp.html#a5f39c6faf77ec83a9e1001900523d451" title="Theoretical maximum payload size in bytes for the current platform.">rf433::MaxPayloadSize</a>). </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="rmt__item__types_8hpp.html#a5f39c6faf77ec83a9e1001900523d451" title="Theoretical maximum payload size in bytes for the current platform.">rf433::MaxPayloadSize</a> </dd></dl>
 
 </div>
 </div>
-<a id="ae8240104f39eda031ddbac94101e0b76" name="ae8240104f39eda031ddbac94101e0b76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8240104f39eda031ddbac94101e0b76">&#9670;&#160;</a></span>send()</h2>
+<a id="a937316f5e750e6b5c0e16faaf00753b8" name="a937316f5e750e6b5c0e16faaf00753b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a937316f5e750e6b5c0e16faaf00753b8">&#9670;&#160;</a></span>send()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -220,7 +212,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_payload_size</b>
         <tr>
           <td class="memname">bool m5::unit::UnitSYN115::send </td>
           <td>(</td>
-          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>burst_transmission_count</em></span><span class="paramdefsep"> = </span><span class="paramdefval">4</span></td><td>)</td>
+          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>burst_transmission_count</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -229,7 +221,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_payload_size</b>
 <p>Send force if exists payload. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">burst_transmission_count</td><td>Count of burst transmission </td></tr>
+    <tr><td class="paramname">burst_transmission_count</td><td>Count of burst transmission (0 = use <a class="el" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html#a4c1b8015790870f82cc38712f3d2cdc4" title="Count of burst transmission.">config_t::burst_transmission_count</a>) </td></tr>
   </table>
   </dd>
 </dl>

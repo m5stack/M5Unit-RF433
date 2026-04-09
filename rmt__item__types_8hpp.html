@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -99,12 +99,13 @@ $(function(){initNavTree('rmt__item__types_8hpp.html',''); initResizable(true); 
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">rmt_item_types.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>RMT releated definition and function for RF433.  
+<p>RMT related definition and function for RF433.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;M5UnitComponent.hpp&gt;</code><br />
 </div>
@@ -113,7 +114,7 @@ $(function(){initNavTree('rmt__item__types_8hpp.html',''); initResizable(true); 
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacem5.html">m5</a></td></tr>
-<tr class="memdesc:namespacem5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top level namespace of M5stack. <br /></td></tr>
+<tr class="memdesc:namespacem5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Top level namespace of M5Stack. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -126,13 +127,16 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::con
 using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::item_container_type</b> = std::vector&lt;gpio::m5_rmt_item_t&gt;</td></tr>
 <tr class="memdesc:af7a42ef74f70e0c5b65cb52329f5a22b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Item container. <br /></td></tr>
 <tr class="separator:af7a42ef74f70e0c5b65cb52329f5a22b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f77b4abbf284f855e40d398cc112291" id="r_a7f77b4abbf284f855e40d398cc112291"><td class="memItemLeft" align="right" valign="top"><a id="a7f77b4abbf284f855e40d398cc112291" name="a7f77b4abbf284f855e40d398cc112291"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::communication_identifier_t</b> = uint32_t</td></tr>
-<tr class="memdesc:a7f77b4abbf284f855e40d398cc112291"><td class="mdescLeft">&#160;</td><td class="mdescRight">Communication identifier. <br /></td></tr>
-<tr class="separator:a7f77b4abbf284f855e40d398cc112291"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a126f6d93bb2aea6a2399520288230b52" id="r_a126f6d93bb2aea6a2399520288230b52"><td class="memItemLeft" align="right" valign="top"><a id="a126f6d93bb2aea6a2399520288230b52" name="a126f6d93bb2aea6a2399520288230b52"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::communication_identifier_t</b> = uint8_t</td></tr>
+<tr class="memdesc:a126f6d93bb2aea6a2399520288230b52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Communication identifier (0-255) <br /></td></tr>
+<tr class="separator:a126f6d93bb2aea6a2399520288230b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a6e64158ea9c32fbe8e32c0100dc6fbff" id="r_a6e64158ea9c32fbe8e32c0100dc6fbff"><td class="memItemLeft" align="right" valign="top">constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e64158ea9c32fbe8e32c0100dc6fbff">m5::unit::rf433::calculateRingBufferSize</a> (const uint32_t payload_size)</td></tr>
+<tr class="memdesc:a6e64158ea9c32fbe8e32c0100dc6fbff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the minimum ring buffer size required to receive the given payload size.  <br /></td></tr>
+<tr class="separator:a6e64158ea9c32fbe8e32c0100dc6fbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb60b348f068799d179145deeddbcd3f" id="r_abb60b348f068799d179145deeddbcd3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#af7a42ef74f70e0c5b65cb52329f5a22b">item_container_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rmt__item__types_8cpp.html#abb60b348f068799d179145deeddbcd3f">m5::unit::rf433::encodeManchester</a> (const uint8_t *data, const uint32_t len, const bool MSB=true)</td></tr>
 <tr class="memdesc:abb60b348f068799d179145deeddbcd3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encode manchester.  <br /></td></tr>
 <tr class="separator:abb60b348f068799d179145deeddbcd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,23 +144,56 @@ Functions</h2></td></tr>
 <tr class="memdesc:afd5fbfe00ec8a17bb22b37d1a0cac1de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode manchester.  <br /></td></tr>
 <tr class="separator:afd5fbfe00ec8a17bb22b37d1a0cac1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader">Protocol attribute bits</h2></td></tr>
-<tr class="memitem:abedf3c0d1672eb8281008fc3133e73a2" id="r_abedf3c0d1672eb8281008fc3133e73a2"><td class="memItemLeft" align="right" valign="top"><a id="abedf3c0d1672eb8281008fc3133e73a2" name="abedf3c0d1672eb8281008fc3133e73a2"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::Protocol</b> = uint8_t</td></tr>
-<tr class="memdesc:abedf3c0d1672eb8281008fc3133e73a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protocol type. <br /></td></tr>
-<tr class="separator:abedf3c0d1672eb8281008fc3133e73a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12851632cbfc29006739237c6a7c56b8" id="r_a12851632cbfc29006739237c6a7c56b8"><td class="memItemLeft" align="right" valign="top"><a id="a12851632cbfc29006739237c6a7c56b8" name="a12851632cbfc29006739237c6a7c56b8"></a>
-constexpr <a class="el" href="#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::ProtocolIncludeSendCount</b> {0x01}</td></tr>
-<tr class="memdesc:a12851632cbfc29006739237c6a7c56b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Include send count. <br /></td></tr>
-<tr class="separator:a12851632cbfc29006739237c6a7c56b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70bb25d388df6098ae04ebe5ecdb4401" id="r_a70bb25d388df6098ae04ebe5ecdb4401"><td class="memItemLeft" align="right" valign="top"><a id="a70bb25d388df6098ae04ebe5ecdb4401" name="a70bb25d388df6098ae04ebe5ecdb4401"></a>
-constexpr <a class="el" href="#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::ProtocolIncludeIdentifier</b> {0x02}</td></tr>
-<tr class="memdesc:a70bb25d388df6098ae04ebe5ecdb4401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Include identifier. <br /></td></tr>
-<tr class="separator:a70bb25d388df6098ae04ebe5ecdb4401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aea0e019098367431997447b81408d9b6" id="r_aea0e019098367431997447b81408d9b6"><td class="memItemLeft" align="right" valign="top"><a id="aea0e019098367431997447b81408d9b6" name="aea0e019098367431997447b81408d9b6"></a>
+constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::ProtocolOverhead</b> = 4</td></tr>
+<tr class="memdesc:aea0e019098367431997447b81408d9b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protocol overhead in bytes: CRC8(1) + ID(1) + Count(1) + Length(1) = 4. <br /></td></tr>
+<tr class="separator:aea0e019098367431997447b81408d9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfab107f20443d36427aa94aa6ab20d8" id="r_adfab107f20443d36427aa94aa6ab20d8"><td class="memItemLeft" align="right" valign="top">constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a> = 6 * 64</td></tr>
+<tr class="memdesc:adfab107f20443d36427aa94aa6ab20d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum RMT items receivable in a single frame per platform.  <br /></td></tr>
+<tr class="separator:adfab107f20443d36427aa94aa6ab20d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f39c6faf77ec83a9e1001900523d451" id="r_a5f39c6faf77ec83a9e1001900523d451"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f39c6faf77ec83a9e1001900523d451">m5::unit::rf433::MaxPayloadSize</a></td></tr>
+<tr class="memdesc:a5f39c6faf77ec83a9e1001900523d451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Theoretical maximum payload size in bytes for the current platform.  <br /></td></tr>
+<tr class="separator:a5f39c6faf77ec83a9e1001900523d451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>RMT releated definition and function for RF433. </p>
+<div class="textblock"><p>RMT related definition and function for RF433. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a6e64158ea9c32fbe8e32c0100dc6fbff" name="a6e64158ea9c32fbe8e32c0100dc6fbff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e64158ea9c32fbe8e32c0100dc6fbff">&#9670;&#160;</a></span>calculateRingBufferSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t m5::unit::rf433::calculateRingBufferSize </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t</td>          <td class="paramname"><span class="paramname"><em>payload_size</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate the minimum ring buffer size required to receive the given payload size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">payload_size</td><td>Payload size in bytes </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Required ring buffer size in bytes </dd></dl>
+
+</div>
+</div>
 <a id="afd5fbfe00ec8a17bb22b37d1a0cac1de" name="afd5fbfe00ec8a17bb22b37d1a0cac1de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd5fbfe00ec8a17bb22b37d1a0cac1de">&#9670;&#160;</a></span>decodeManchester()</h2>
 
@@ -194,9 +231,10 @@ constexpr <a class="el" href="#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a>&#
 <p>Decode manchester. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">buf</td><td>Output buffer @paran buf_sizr Output buffer size </td></tr>
+    <tr><td class="paramname">buf</td><td>Output buffer </td></tr>
+    <tr><td class="paramname">buf_size</td><td>Output buffer size </td></tr>
     <tr><td class="paramname">data</td><td>RMT data (exclude SOF) </td></tr>
-    <tr><td class="paramname">Number</td><td>of the RMT items </td></tr>
+    <tr><td class="paramname">num</td><td>Number of the RMT items </td></tr>
     <tr><td class="paramname">MSB</td><td>Process from MSB if true </td></tr>
   </table>
   </dd>
@@ -233,12 +271,85 @@ constexpr <a class="el" href="#abedf3c0d1672eb8281008fc3133e73a2">Protocol</a>&#
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>Input buffer </td></tr>
-    <tr><td class="paramname">Length</td><td>of input buffer </td></tr>
+    <tr><td class="paramname">len</td><td>Length of input buffer </td></tr>
     <tr><td class="paramname">MSB</td><td>Process from MSB if true </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Encoded container </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a5f39c6faf77ec83a9e1001900523d451" name="a5f39c6faf77ec83a9e1001900523d451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f39c6faf77ec83a9e1001900523d451">&#9670;&#160;</a></span>MaxPayloadSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t m5::unit::rf433::MaxPayloadSize</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">static_cast&lt;</span>uint8_t<span class="keyword">&gt;</span>((<a class="code hl_variable" href="#adfab107f20443d36427aa94aa6ab20d8">RmtRxMaxItems</a> - 1 ) / 8 - ProtocolOverhead)</div>
+<div class="ttc" id="armt__item__types_8hpp_html_adfab107f20443d36427aa94aa6ab20d8"><div class="ttname"><a href="#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a></div><div class="ttdeci">constexpr uint16_t RmtRxMaxItems</div><div class="ttdoc">Maximum RMT items receivable in a single frame per platform.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:51</div></div>
+</div><!-- fragment -->
+<p>Theoretical maximum payload size in bytes for the current platform. </p>
+<p>Calculated from RmtRxMaxItems with protocol overhead (4 bytes). This is the theoretical limit based on RMT hardware memory. In practice, AGC noise from the SYN531R receiver consumes RMT items, reducing the usable capacity. Theoretical values:</p><ul>
+<li>ESP32: 43 bytes (practical safe limit ~23 bytes)</li>
+<li>ESP32-S3: 43 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)</li>
+<li>ESP-IDF 5.x (RMT v2): 255 bytes <dl class="section warning"><dt>Warning</dt><dd>When communicating between RMT v1 (ESP-IDF 4.x) and RMT v2 (ESP-IDF 5.x) devices, the payload size must not exceed the receiver's limit. A v2 transmitter can send up to 255 bytes, but a v1 receiver's capacity is much smaller and varies depending on AGC noise conditions. Always limit the payload to the receiver's max_payload_size. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>UnitSYN531R::config_t::max_payload_size for the configurable runtime limit </dd></dl>
+</li>
+</ul>
+
+</div>
+</div>
+<a id="adfab107f20443d36427aa94aa6ab20d8" name="adfab107f20443d36427aa94aa6ab20d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfab107f20443d36427aa94aa6ab20d8">&#9670;&#160;</a></span>RmtRxMaxItems</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t m5::unit::rf433::RmtRxMaxItems = 6 * 64</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Maximum RMT items receivable in a single frame per platform. </p>
+<ul>
+<li>ESP32 (RMT v1): 6 mem_blocks x 64 = 384 items</li>
+<li>ESP32-S3 (RMT v1): 1 mem_block x 48 = 48 items (threshold ISR wrapping)</li>
+<li>ESP-IDF 5.x (RMT v2): ping-pong/DMA, limited by user buffer only <dl class="section note"><dt>Note</dt><dd>RF433 ASK receivers (SYN531R) generate AGC noise before the SOF, consuming part of the RMT memory. The maximum payload must fit within a single RMT hardware frame to avoid truncation. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>ESP32-S3 + ESP-IDF 4.x has a known RMT RX ping-pong bug that may cause memory corruption and crash in noisy RF environments. See <a href="https://github.com/espressif/esp-idf/issues/13419">https://github.com/espressif/esp-idf/issues/13419</a> Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3. ESP32: 8ch x 64 items, use 6 = 384 </dd></dl>
+</li>
+</ul>
 
 </div>
 </div>

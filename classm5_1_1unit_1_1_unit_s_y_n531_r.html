@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.0.1 git rev:a9e15af</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
    </div>
   </td>
  </tr>
@@ -133,18 +133,28 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>container_type</b> =
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1fa848b0e2c70df3a4c05156c63e6af2" id="r_a1fa848b0e2c70df3a4c05156c63e6af2"><td class="memItemLeft" align="right" valign="top"><a id="a1fa848b0e2c70df3a4c05156c63e6af2" name="a1fa848b0e2c70df3a4c05156c63e6af2"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () override</td></tr>
+<tr class="memdesc:a1fa848b0e2c70df3a4c05156c63e6af2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the receiver unit. <br /></td></tr>
 <tr class="separator:a1fa848b0e2c70df3a4c05156c63e6af2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75afbf3d147acfc437789ad5fead791e" id="r_a75afbf3d147acfc437789ad5fead791e"><td class="memItemLeft" align="right" valign="top"><a id="a75afbf3d147acfc437789ad5fead791e" name="a75afbf3d147acfc437789ad5fead791e"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (const bool force=false) override</td></tr>
+<tr class="memdesc:a75afbf3d147acfc437789ad5fead791e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the receiver unit. <br /></td></tr>
 <tr class="separator:a75afbf3d147acfc437789ad5fead791e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a528a4d1be057d67fe5523f5f2194863d" id="r_a528a4d1be057d67fe5523f5f2194863d"><td class="memItemLeft" align="right" valign="top"><a id="a528a4d1be057d67fe5523f5f2194863d" name="a528a4d1be057d67fe5523f5f2194863d"></a>
+std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>codec</b> ()</td></tr>
+<tr class="memdesc:a528a4d1be057d67fe5523f5f2194863d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get codec (for codec-specific configuration) <br /></td></tr>
+<tr class="separator:a528a4d1be057d67fe5523f5f2194863d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaf7fa36eea6aa21b3905a8010e84e02" id="r_afaf7fa36eea6aa21b3905a8010e84e02"><td class="memItemLeft" align="right" valign="top"><a id="afaf7fa36eea6aa21b3905a8010e84e02" name="afaf7fa36eea6aa21b3905a8010e84e02"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCodec</b> (std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &gt; <a class="el" href="#a528a4d1be057d67fe5523f5f2194863d">codec</a>)</td></tr>
+<tr class="memdesc:afaf7fa36eea6aa21b3905a8010e84e02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set protocol codec (default: M5Codec) <br /></td></tr>
+<tr class="separator:afaf7fa36eea6aa21b3905a8010e84e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Configuration for begin</div></td></tr>
 <tr class="memitem:a00544ce5452087f7749c3b5d0024fe8c" id="r_a00544ce5452087f7749c3b5d0024fe8c"><td class="memItemLeft" align="right" valign="top"><a id="a00544ce5452087f7749c3b5d0024fe8c" name="a00544ce5452087f7749c3b5d0024fe8c"></a>
 <a class="el" href="structm5_1_1unit_1_1_unit_s_y_n531_r_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> ()</td></tr>
-<tr class="memdesc:a00544ce5452087f7749c3b5d0024fe8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configration. <br /></td></tr>
+<tr class="memdesc:a00544ce5452087f7749c3b5d0024fe8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the configuration. <br /></td></tr>
 <tr class="separator:a00544ce5452087f7749c3b5d0024fe8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a253312cae400d99425e3f0b46e3429bf" id="r_a253312cae400d99425e3f0b46e3429bf"><td class="memItemLeft" align="right" valign="top"><a id="a253312cae400d99425e3f0b46e3429bf" name="a253312cae400d99425e3f0b46e3429bf"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> (const <a class="el" href="structm5_1_1unit_1_1_unit_s_y_n531_r_1_1config__t.html">config_t</a> &amp;cfg)</td></tr>
-<tr class="memdesc:a253312cae400d99425e3f0b46e3429bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configration. <br /></td></tr>
+<tr class="memdesc:a253312cae400d99425e3f0b46e3429bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the configuration. <br /></td></tr>
 <tr class="separator:a253312cae400d99425e3f0b46e3429bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Data</div></td></tr>
 <tr class="memitem:a4495ec6a30ff29b1d5fe253b72fbbb03" id="r_a4495ec6a30ff29b1d5fe253b72fbbb03"><td class="memItemLeft" align="right" valign="top"><a id="a4495ec6a30ff29b1d5fe253b72fbbb03" name="a4495ec6a30ff29b1d5fe253b72fbbb03"></a>
