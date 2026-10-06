@@ -123,14 +123,31 @@ public:
     ///@}
 
     //! @brief Get codec (for codec-specific configuration)
-    inline std::shared_ptr<rf433::ProtocolCodec> codec()
+    inline rf433::ProtocolCodec& codec()
     {
-        return _codec;
+        if (_codec) {
+            return *_codec;
+        }
+        return _default_codec;
     }
-    //! @brief Set protocol codec (default: M5Codec)
-    void setCodec(std::shared_ptr<rf433::ProtocolCodec> codec)
+    //! @brief Get codec (for codec-specific configuration)
+    inline const rf433::ProtocolCodec& codec() const
     {
-        _codec = codec;
+        if (_codec) {
+            return *_codec;
+        }
+        return _default_codec;
+    }
+    //! @brief Set protocol codec
+    //! @warning Caller must ensure the codec outlives this unit
+    void setCodec(rf433::ProtocolCodec& codec)
+    {
+        _codec = &codec;
+    }
+    //! @brief Reset to default M5Codec
+    void resetCodec()
+    {
+        _codec = nullptr;
     }
 
 protected:
@@ -143,7 +160,8 @@ private:
             free(p);
         }
     };
-    std::shared_ptr<rf433::ProtocolCodec> _codec{std::make_shared<rf433::M5Codec>()};
+    rf433::M5Codec _default_codec{};
+    rf433::ProtocolCodec* _codec{};  // nullptr: use _default_codec
     container_type _data{};
     std::unique_ptr<uint8_t[], FreeDeleter> _rx_buffer{};
     size_t _rx_buffer_size{};

@@ -144,7 +144,7 @@ bool UnitSYN531R::read_data()
     uint8_t decode_data[DECODE_BUF_SIZE]{};
     DecodeResult result{};
 
-    if (_codec->decode(items, inum, decode_data, DECODE_BUF_SIZE, result)) {
+    if (codec().decode(items, inum, decode_data, DECODE_BUF_SIZE, result)) {
         // Store: ID(1) + Count(1) + Length(1) + Payload(n)
         _data.clear();
         // ID

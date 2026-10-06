@@ -103,7 +103,7 @@ bool UnitSYN115::send(const uint8_t burst_transmission_count)
     }
 
     // Encode complete frame via codec
-    auto rmt_items = _codec->encode(_payload.data(), _payload_size);
+    auto rmt_items = codec().encode(_payload.data(), _payload_size);
 
     auto wait     = estimate_tx_timeout_ticks(rmt_items);
     uint8_t count = burst_transmission_count ? burst_transmission_count : _cfg.burst_transmission_count;

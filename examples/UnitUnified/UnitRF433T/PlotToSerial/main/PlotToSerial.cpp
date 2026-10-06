@@ -55,7 +55,7 @@ void setup()
         }
     }
 
-    auto* custom = static_cast<m5::unit::rf433::M5Codec*>(unit.codec().get());
+    auto* custom = static_cast<m5::unit::rf433::M5Codec*>(&unit.codec());
     custom->setCommunicationIdentifier(esp_random());
 
     // Fill sweep buffer with printable pattern
@@ -89,7 +89,7 @@ void loop()
         lcd.setCursor(0, 0);
         lcd.setTextSize(1);
         lcd.printf("TX %02X\n%u bytes",
-                   static_cast<m5::unit::rf433::M5Codec*>(unit.codec().get())->communicationIdentifier(), sz);
+                   static_cast<m5::unit::rf433::M5Codec*>(&unit.codec())->communicationIdentifier(), sz);
         sweep_buf[sz - 1] = 'A' + ((sz - 1) % 26);  // restore pattern
 
         if (++sweep_idx >= SWEEP_COUNT) {

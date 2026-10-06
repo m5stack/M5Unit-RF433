@@ -81,7 +81,7 @@ void setup()
     M5_LOGI("M5UnitUnified initialized");
     M5_LOGI("%s", Units.debugInfo().c_str());
     my_id = esp_random();
-    static_cast<m5::unit::rf433::M5Codec*>(transmitter.codec().get())->setCommunicationIdentifier(my_id);
+    static_cast<m5::unit::rf433::M5Codec*>(&transmitter.codec())->setCommunicationIdentifier(my_id);
     M5.Log.printf("MyID: %02X\n", my_id);
 
     // Fill sweep buffer with printable pattern
