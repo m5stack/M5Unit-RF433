@@ -45,6 +45,25 @@ Please follow the radio laws in the location where it is used.
 ## Examples
 See also [examples/UnitUnified](examples/UnitUnified)
 
+### For ESP-IDF settings
+
+> **NOTE:** The ESP-IDF native build (`idf.py`) targets ESP-IDF **5.1 or later** (5.x and 6.x) on esp32 / esp32s3 / esp32c3 / esp32c6 / esp32h2 / esp32p4. ESP32-C2 / C61 are not supported (no RMT).
+
+On ESP-IDF native builds (`idf.py`), the unit is selected via Kconfig instead of editing the source. Each example exposes the choice through `main/Kconfig.projbuild`, which sources the Kconfig files in `examples/UnitUnified/common/`:
+
+| Kconfig file | Variants offered | Used by |
+|---|---|---|
+| `Kconfig.variant.tx` | UnitRF433T (U114) | UnitRF433T/PlotToSerial, Transceiver |
+| `Kconfig.variant.rx` | UnitRF433R (U113) | UnitRF433R/PlotToSerial, Transceiver |
+
+`examples/UnitUnified/common/variant.cmake` maps the chosen `CONFIG_EXAMPLE_USING_*` to the source-level macro shared with the Arduino build. Each choice currently has a single option (the default), so no `menuconfig` step is needed:
+
+```sh
+cd examples/UnitUnified/UnitRF433R/PlotToSerial    # or UnitRF433T/PlotToSerial, Transceiver
+idf.py set-target esp32s3                          # or esp32 / esp32c6 / esp32h2 / ...
+idf.py build flash monitor
+```
+
 ## Doxygen document
 [GitHub Pages](https://m5stack.github.io/M5Unit-RF433/)
 

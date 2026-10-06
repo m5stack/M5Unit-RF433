@@ -1,0 +1,3 @@
+# The unit choice(s) for this example.
+rsource "../../common/Kconfig.variant.tx"
+rsource "../../common/Kconfig.variant.rx"

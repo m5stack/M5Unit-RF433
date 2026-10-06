@@ -1,0 +1,140 @@
+name: Build(esp-idf-native)
+
+on:
+  push:
+    tags-ignore:
+      - '*.*.*'
+      - 'v*.*.*'
+    branches:
+      - '*'
+    paths:
+      - 'src/**.cpp'
+      - 'src/**.hpp'
+      - 'src/**.h'
+      - 'src/**.c'
+      - 'CMakeLists.txt'
+      - 'idf_component.yml'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
+      - 'examples/UnitUnified/**/CMakeLists.txt'
+      - 'examples/UnitUnified/**/Kconfig.projbuild'
+      - 'examples/UnitUnified/**/idf_component.yml'
+      - 'examples/UnitUnified/common/**'
+      - '.github/workflows/esp-idf-build-check.yml'
+  pull_request:
+    paths:
+      - 'src/**.cpp'
+      - 'src/**.hpp'
+      - 'src/**.h'
+      - 'src/**.c'
+      - 'CMakeLists.txt'
+      - 'idf_component.yml'
+      - 'examples/UnitUnified/**.cpp'
+      - 'examples/UnitUnified/**.hpp'
+      - 'examples/UnitUnified/**.h'
+      - 'examples/UnitUnified/**.c'
+      - 'examples/UnitUnified/**/CMakeLists.txt'
+      - 'examples/UnitUnified/**/Kconfig.projbuild'
+      - 'examples/UnitUnified/**/idf_component.yml'
+      - 'examples/UnitUnified/common/**'
+      - '.github/workflows/esp-idf-build-check.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Purpose: guarantee that ESP-IDF native (idf.py) users can build the library as a component and
+# every bundled example, on every target in idf_component.yml and every supported IDF boundary.
+# Compile coverage only (runtime is verified on hardware separately).
+#
+# Cross design: example/variant coverage on esp32s3 (latest IDF), and library/deps coverage on the
+# chip x IDF matrix via one representative example. The M5Unit-RF433 component globs all src/*.cpp,
+# so every example build compiles both unit drivers (SYN115 TX / SYN531R RX) -- a single example
+# already exercises the whole library per (target, idf). Job A sweeps the per-example app code + Kconfig
+# variants once (esp32s3 / v6.1); Job B sweeps the IDF-sensitive library (RMT v2) + wiring across every
+# SoC and IDF boundary using UnitRF433R/PlotToSerial (GROVE, wiring::addGPIO).
+jobs:
+  # Example & variant coverage: every example app on esp32s3 (LCD-capable dual-core Xtensa with
+  # PSRAM) at the latest IDF. Each example currently has a single variant (the Kconfig default), so
+  # config is empty; add a row per CONFIG_EXAMPLE_USING_* when a new variant is added.
+  build-examples:
+    name: v6.1 esp32s3 ${{ matrix.example_config.label }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        example_config:
+          - label: UnitRF433T PlotToSerial
+            example_path: examples/UnitUnified/UnitRF433T/PlotToSerial
+            config: ''
+          - label: UnitRF433R PlotToSerial
+            example_path: examples/UnitUnified/UnitRF433R/PlotToSerial
+            config: ''
+          - label: Transceiver
+            example_path: examples/UnitUnified/Transceiver
+            config: ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Kconfig variant
+        # The example's own sdkconfig.defaults is not read (top CMakeLists points SDKCONFIG_DEFAULTS
+        # at common/sdkconfig.defaults). Append the choice to common/ in the CI workspace only.
+        if: matrix.example_config.config != ''
+        run: |
+          echo "" >> examples/UnitUnified/common/sdkconfig.defaults
+          echo "${{ matrix.example_config.config }}" >> examples/UnitUnified/common/sdkconfig.defaults
+
+      - name: ESP-IDF build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v6.1
+          target: esp32s3
+          path: ${{ matrix.example_config.example_path }}
+
+  # Chip coverage: UnitRF433R/PlotToSerial on every supported SoC. esp32s3 is included for the older
+  # IDF boundaries (its v6.1 build is already done by build-examples). esp32c3 (StampC3 etc.)
+  # = RISC-V single-core without PSRAM. esp32 = classic Xtensa dual-core (also the M5Unified
+  # legacy-touch path). esp32c6 (NanoC6 / NessoN1) / esp32h2 (NanoH2) = RISC-V single-core,
+  # exercises the app_main CONFIG_FREERTOS_UNICORE feedIdle branch. esp32p4 (M5Stack Tab5) =
+  # RISC-V dual-core; the sdkconfig.defaults.esp32p4 overlay is auto-applied.
+  # ESP32-C2 / C61 have no RMT and are not targets of this library.
+  build-chips:
+    name: ${{ matrix.idf }} ${{ matrix.target }} UnitRF433R PlotToSerial
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        target: [esp32, esp32s3, esp32c3, esp32c6, esp32h2, esp32p4]
+        # idf boundaries: 5.1.7 = oldest legacy-driver (5.0.x dropped: M5GFX needs esp_mm added
+        # in 5.1), 5.4.4 = new driver/*_master.h era, 5.5.4 = latest 5.x,
+        # 6.1 = latest (M5Unified/M5GFX support 6.x; 7.x is not verified yet).
+        idf: [v5.1.7, v5.4.4, v5.5.4, v6.1]
+        exclude:
+          # esp32p4 stable from IDF v5.3 (M5GFX P4 verified on 5.4/5.5). 5.1.7 not applicable.
+          - target: esp32p4
+            idf: v5.1.7
+          # esp32s3 x v6.1 UnitRF433R PlotToSerial is identical to the build-examples job.
+          - target: esp32s3
+            idf: v6.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: ESP-IDF build
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: ${{ matrix.idf }}
+          target: ${{ matrix.target }}
+          path: examples/UnitUnified/UnitRF433R/PlotToSerial

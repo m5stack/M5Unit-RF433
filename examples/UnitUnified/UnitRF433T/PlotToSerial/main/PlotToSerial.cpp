@@ -10,6 +10,7 @@
 #include <M5UnitUnified.h>
 #include <M5UnitUnifiedRF433.h>
 #include <esp_random.h>
+#include <wiring/m5_unit_unified_wiring.hpp>  // board-aware connection helpers (include last)
 
 namespace {
 auto& lcd = M5.Display;
@@ -40,28 +41,13 @@ void setup()
 #if defined(M5_UNIT_UNIFIED_HAS_RMT) && !M5_UNIT_UNIFIED_HAS_RMT
     // UnitRF433 requires the RMT peripheral
     M5_LOGE("RMT is not supported on this target");
-    lcd.fillScreen(TFT_RED);
-    while (true) {
-        m5::utility::delay(10000);
-    }
+    m5::unit::wiring::failStop();
 #endif
 
-    auto pin_num_gpio_in  = M5.getPin(m5::pin_name_t::port_b_in);
-    auto pin_num_gpio_out = M5.getPin(m5::pin_name_t::port_b_out);
-    if (pin_num_gpio_in < 0 || pin_num_gpio_out < 0) {
-        M5_LOGW("PortB is not available");
-        Wire.end();
-        pin_num_gpio_in  = M5.getPin(m5::pin_name_t::port_a_pin1);
-        pin_num_gpio_out = M5.getPin(m5::pin_name_t::port_a_pin2);
-    }
-    M5_LOGI("getPin: %d,%d", pin_num_gpio_in, pin_num_gpio_out);
-
-    if (!Units.add(unit, pin_num_gpio_in, pin_num_gpio_out) || !Units.begin()) {
+    // UnitRF433T: TX (output) only, PortB preferred, fallback to PortA
+    if (!m5::unit::wiring::addGPIO(Units, unit, m5::unit::wiring::GpioRole::OutOnly) || !Units.begin()) {
         M5_LOGE("Failed to begin");
-        lcd.fillScreen(TFT_RED);
-        while (true) {
-            m5::utility::delay(10000);
-        }
+        m5::unit::wiring::failStop();
     }
 
     auto* custom = static_cast<m5::unit::rf433::M5Codec*>(&unit.codec());
@@ -107,3 +93,34 @@ void loop()
         M5.Speaker.tone(4000, 20);
     }
 }
+
+#if !defined(ARDUINO)
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include <esp_timer.h>
+
+#if CONFIG_FREERTOS_UNICORE
+static inline void feedIdleTaskPeriodically(void)
+{
+    constexpr uint32_t FEED_INTERVAL_MS   = 2000;
+    constexpr TickType_t FEED_SLEEP_TICKS = pdMS_TO_TICKS(5);
+    static uint32_t s_next_feed_ms        = 0;
+    const uint32_t now_ms                 = static_cast<uint32_t>(esp_timer_get_time() / 1000);
+    if (now_ms >= s_next_feed_ms) {
+        s_next_feed_ms = now_ms + FEED_INTERVAL_MS;
+        vTaskDelay(FEED_SLEEP_TICKS);
+    }
+}
+#endif
+
+extern "C" void app_main(void)
+{
+    setup();
+    for (;;) {
+#if CONFIG_FREERTOS_UNICORE
+        feedIdleTaskPeriodically();
+#endif
+        loop();
+    }
+}
+#endif

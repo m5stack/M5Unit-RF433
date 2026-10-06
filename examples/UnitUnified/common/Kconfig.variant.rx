@@ -1,0 +1,17 @@
+# "Target receiver" selection for the examples that drive an RF433 receiver (ESP-IDF).
+# rsource'd from UnitRF433R/PlotToSerial/main/Kconfig.projbuild and Transceiver/main/Kconfig.projbuild.
+# The chosen CONFIG_EXAMPLE_USING_* is mapped to the source-level macro in common/variant.cmake
+# (shared with the Arduino build).
+menu "M5Unit-RF433 receiver example"
+
+choice EXAMPLE_RX_VARIANT
+    prompt "Target receiver"
+    default EXAMPLE_USING_UNIT_RF433R
+    help
+        Which RF433 receiver this example drives.
+
+    config EXAMPLE_USING_UNIT_RF433R
+        bool "UnitRF433R (U113, GPIO / GROVE)"
+endchoice
+
+endmenu
