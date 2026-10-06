@@ -19,6 +19,10 @@ using namespace m5::unit::rf433;
 
 namespace {
 
+// readWithTransaction() writes a 2-byte length followed by the RMT items. Passing the buffer this many
+// bytes in puts the items on a 4-byte boundary (m5_rmt_item_t is a 32-bit structure).
+constexpr uint16_t RX_FRONT_PAD{2};
+
 inline bool is_unit_pbhub(Component* u)
 {
     static constexpr types::uid_t pbhub_uid{"UnitPbHub"_mmh3};
@@ -59,9 +63,9 @@ bool UnitSYN531R::begin()
     // Calculate ring buffer size: must hold at least 2048 bytes (empirically safe for AGC noise + data)
     uint16_t payload_ring = calculateRingBufferSize(_cfg.max_payload_size);
     uint16_t buf_bytes    = payload_ring > 2048 ? payload_ring : 2048;
-    buf_bytes             = (buf_bytes + 3) & ~3;  // 4-byte align (required by RMT v2)
+    buf_bytes             = (buf_bytes + RX_FRONT_PAD + 3) & ~3;  // Room for the front pad, rounded up to 4 bytes
 
-    // Allocate 4-byte aligned receive buffer (required by RMT v2)
+    // Allocate a 4-byte aligned receive buffer so that the items after the front pad and length are aligned
     auto* rx_buf = static_cast<uint8_t*>(heap_caps_aligned_alloc(4, buf_bytes, MALLOC_CAP_8BIT));
     if (!rx_buf) {
         M5_LIB_LOGE("Failed to allocate rx buffer (%u bytes)", buf_bytes);
@@ -125,8 +129,8 @@ void UnitSYN531R::update(const bool /*force*/)
 
 bool UnitSYN531R::read_data()
 {
-    auto buffer_size = _rx_buffer_size;
-    auto* buff       = _rx_buffer.get();
+    auto buffer_size = _rx_buffer_size - RX_FRONT_PAD;
+    auto* buff       = _rx_buffer.get() + RX_FRONT_PAD;
 
     if (readWithTransaction(buff, buffer_size) != m5::hal::error::error_t::OK) {
         return false;
@@ -139,9 +143,7 @@ bool UnitSYN531R::read_data()
         return false;
     }
 
-    // buff is 4-byte aligned (heap_caps_aligned_alloc), buff+2 is 2-byte aligned.
-    // rmt_item32_t is naturally 4-byte aligned, but ESP32 (Xtensa) and ESP32-C6 (RISC-V)
-    // both handle unaligned access transparently, so buff+2 is safe in practice.
+    // _rx_buffer is 4-byte aligned and buff = _rx_buffer + RX_FRONT_PAD, so the items at buff + 2 are 4-byte aligned
     auto* items = reinterpret_cast<m5::unit::gpio::m5_rmt_item_t*>(buff + 2 /* len */);
 
     // Decode via codec (handles SOF scan, Manchester decode, CRC validation)
