@@ -42,6 +42,21 @@ Please follow the radio laws in the location where it is used.
 |UnitRF433R|NG|
 
 
+## Payload size
+RF433 (433.92 MHz ASK) is intended for short messages (a few to a few tens of bytes).
+Each frame is Manchester-encoded and protected by CRC8 automatically.
+
+The receivable payload size depends on the **receiver** side:
+
+| Receiver environment | RMT | Default `max_payload_size` | Theoretical max |
+|---|---|---|---|
+| ESP32 / ESP32-S3 with Arduino 2.x (ESP-IDF 4.x) | v1 | 23 | 43 |
+| Arduino 3.x / ESP-IDF 5.x or later | v2 | 255 (needs M5UnitUnified >= 0.6.0 for over about 120 bytes) | 255 |
+
+- Keep the transmitted payload within the receiver's `max_payload_size`, especially when the transmitter is RMT v2 and the receiver is RMT v1.
+- For longer data, split it into packets (e.g. 20-30 bytes each with a sequence number) and reassemble on the receiver.
+- At longer distances or in noisy environments, a long frame is more likely to be lost (a single bit error discards the whole frame) or, rarely, to pass the CRC8 check while corrupted. Prefer short packets, repeat them with `burst_transmission_count`, and add your own integrity check (e.g. CRC16) for important data.
+
 ## Examples
 See also [examples/UnitUnified](examples/UnitUnified)
 
