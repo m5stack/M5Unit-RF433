@@ -49,6 +49,7 @@ bool UnitSYN531R::begin()
         return false;
     }
 
+#if !defined(M5_UNIT_UNIFIED_HAS_RMT) || M5_UNIT_UNIFIED_HAS_RMT
     // Clamp max_payload_size to platform theoretical limit
     if (_cfg.max_payload_size > MaxPayloadSize) {
         M5_LIB_LOGW("max_payload_size %u exceeds platform max %u, clamped", _cfg.max_payload_size, MaxPayloadSize);
@@ -107,6 +108,10 @@ bool UnitSYN531R::begin()
         return false;
     }
     return true;
+#else
+    M5_LIB_LOGE("RMT is not supported on this target");
+    return false;
+#endif
 }
 
 void UnitSYN531R::update(const bool /*force*/)

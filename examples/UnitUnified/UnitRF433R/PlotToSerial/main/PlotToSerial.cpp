@@ -33,6 +33,15 @@ void setup()
     if (lcd.height() > lcd.width()) {
         lcd.setRotation(1);
     }
+
+#if defined(M5_UNIT_UNIFIED_HAS_RMT) && !M5_UNIT_UNIFIED_HAS_RMT
+    // UnitRF433 requires the RMT peripheral
+    M5_LOGE("RMT is not supported on this target");
+    lcd.fillScreen(TFT_RED);
+    while (true) {
+        m5::utility::delay(10000);
+    }
+#endif
     auto pin_num_gpio_in  = M5.getPin(m5::pin_name_t::port_b_in);
     auto pin_num_gpio_out = M5.getPin(m5::pin_name_t::port_b_out);
     if (pin_num_gpio_in < 0 || pin_num_gpio_out < 0) {

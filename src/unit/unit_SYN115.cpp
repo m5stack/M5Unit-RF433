@@ -48,6 +48,7 @@ bool UnitSYN115::begin()
         return false;
     }
 
+#if !defined(M5_UNIT_UNIFIED_HAS_RMT) || M5_UNIT_UNIFIED_HAS_RMT
     if (!pinModeTX(gpio::Mode::Output)) {
         return false;
     }
@@ -69,6 +70,10 @@ bool UnitSYN115::begin()
 
     clear();
     return true;
+#else
+    M5_LIB_LOGE("RMT is not supported on this target");
+    return false;
+#endif
 }
 
 void UnitSYN115::update(const bool force)

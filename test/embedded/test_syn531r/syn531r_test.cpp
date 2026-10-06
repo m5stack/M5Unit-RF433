@@ -17,6 +17,8 @@ using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::rf433;
 
+// Unit component tests (requires RMT)
+#if !defined(M5_UNIT_UNIFIED_HAS_RMT) || M5_UNIT_UNIFIED_HAS_RMT
 class TestSYN531R : public GPIOComponentTestBase<UnitSYN531R> {
 protected:
     virtual UnitSYN531R* get_instance() override
@@ -78,6 +80,7 @@ TEST_F(TestSYN531R, MaxPayloadSize)
     unit->config(cfg);
     EXPECT_EQ(unit->config().max_payload_size, 10);
 }
+#endif
 
 // Codec pointer must follow the moved-to unit (no hardware required)
 TEST(SYN531RCodec, Move)

@@ -18,6 +18,8 @@ using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::rf433;
 
+// Unit component tests (requires RMT)
+#if !defined(M5_UNIT_UNIFIED_HAS_RMT) || M5_UNIT_UNIFIED_HAS_RMT
 class TestSYN115 : public GPIOComponentTestBase<UnitSYN115> {
 protected:
     virtual UnitSYN115* get_instance() override
@@ -120,6 +122,7 @@ TEST_F(TestSYN115, SendEmpty)
     // send() without push_back should return false
     EXPECT_FALSE(unit->send());
 }
+#endif
 
 // Codec pointer must follow the moved-to unit (no hardware required)
 TEST(SYN115Codec, Move)
