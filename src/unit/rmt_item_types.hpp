@@ -11,6 +11,9 @@
 #define M5_UNIT_RF433_RMT_ITEM_TYPES_HPP
 
 #include <M5UnitComponent.hpp>
+#if defined(ESP_PLATFORM)
+#include <soc/soc_caps.h>
+#endif
 
 namespace m5 {
 namespace unit {
@@ -35,7 +38,8 @@ constexpr uint8_t ProtocolOverhead = 4;
   @brief Maximum RMT items receivable in a single frame per platform
   @details
   - ESP32 (RMT v1): 6 mem_blocks x 64 = 384 items
-  - ESP32-S3 (RMT v1): 1 mem_block x 48 = 48 items (threshold ISR wrapping)
+  - ESP32-S2 (RMT v1): 4 mem_blocks x 64 = 256 items (all 4 channels can receive)
+  - ESP32-S3 / ESP32-C3 (RMT v1): 1 mem_block x 48 = 48 items (RX ping-pong: threshold ISR wrapping)
   - ESP-IDF 5.x (RMT v2): ping-pong/DMA, limited by user buffer only
   @note RF433 ASK receivers (SYN531R) generate AGC noise before the SOF, consuming part of the RMT memory.
   The maximum payload must fit within a single RMT hardware frame to avoid truncation.
@@ -44,11 +48,19 @@ constexpr uint8_t ProtocolOverhead = 4;
   Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3.
  */
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
+constexpr uint8_t RmtRxMemBlocks = 2;     //!< RMT v2: memory blocks for the RX channel
 constexpr uint16_t RmtRxMaxItems = 4096;  //!< RMT v2: ping-pong/DMA handles large frames
-#elif defined(CONFIG_IDF_TARGET_ESP32S3)
-constexpr uint16_t RmtRxMaxItems = 1 * 48;  //!< ESP32-S3: 1 mem_block x 48 items (threshold ISR handles wrapping)
+#elif defined(SOC_RMT_SUPPORT_RX_PINGPONG) && SOC_RMT_SUPPORT_RX_PINGPONG
+constexpr uint8_t RmtRxMemBlocks = 1;  //!< ESP32-S3 / ESP32-C3: 1 mem_block (threshold ISR handles wrapping)
+constexpr uint16_t RmtRxMaxItems = RmtRxMemBlocks * SOC_RMT_MEM_WORDS_PER_CHANNEL;  //!< 48 items
+#elif defined(SOC_RMT_RX_CANDIDATES_PER_GROUP)
+// RX channels are the last SOC_RMT_RX_CANDIDATES_PER_GROUP ones and their blocks must stay within the group
+constexpr uint8_t RmtRxMemBlocks =
+    (SOC_RMT_RX_CANDIDATES_PER_GROUP < 6) ? SOC_RMT_RX_CANDIDATES_PER_GROUP : 6;    //!< ESP32: 6, ESP32-S2: 4
+constexpr uint16_t RmtRxMaxItems = RmtRxMemBlocks * SOC_RMT_MEM_WORDS_PER_CHANNEL;  //!< ESP32: 384, ESP32-S2: 256
 #else
-constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< ESP32: 8ch x 64 items, use 6 = 384
+constexpr uint8_t RmtRxMemBlocks = 6;       //!< Host (native) build: same as ESP32
+constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< Host (native) build: same as ESP32
 #endif
 
 /*!
@@ -58,7 +70,8 @@ constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< ESP32: 8ch x 64 items, use 6 = 
   SYN531R receiver consumes RMT items, reducing the usable capacity.
   Theoretical values:
   - ESP32: 43 bytes (practical safe limit ~23 bytes)
-  - ESP32-S3: 43 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
+  - ESP32-S2: 27 bytes
+  - ESP32-S3 / ESP32-C3: 43 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)
   - ESP-IDF 5.x (RMT v2): 255 bytes
   @warning When communicating between RMT v1 (ESP-IDF 4.x) and RMT v2 (ESP-IDF 5.x) devices,
   the payload size must not exceed the receiver's limit. A v2 transmitter can send up to 255 bytes,
@@ -69,8 +82,8 @@ constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< ESP32: 8ch x 64 items, use 6 = 
 constexpr uint8_t MaxPayloadSize =
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
     255;
-#elif defined(CONFIG_IDF_TARGET_ESP32S3)
-    // ESP32-S3 uses mem_blocks=1 with threshold ISR wrapping;
+#elif defined(SOC_RMT_SUPPORT_RX_PINGPONG) && SOC_RMT_SUPPORT_RX_PINGPONG
+    // ESP32-S3 / ESP32-C3 use mem_blocks=1 with threshold ISR wrapping;
     // theoretical limit depends on ISR throughput, use ESP32 equivalent
     43;
 #else
