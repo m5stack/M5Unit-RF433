@@ -61,7 +61,7 @@ jobs:
           - UnitRF433T
 
         board:
-          # Reduced from 19 to 5 boards: one per compile config (toolchain x chip arch).
+          # One board per compile config (toolchain x chip arch).
           # Others differ only in the variant header and are commented out with the reason.
           # espressif32 x ESP32 (RMT v1)
           - Core
