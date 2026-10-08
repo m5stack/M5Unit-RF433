@@ -62,7 +62,7 @@ See also [examples/UnitUnified](examples/UnitUnified)
 
 ### For ESP-IDF settings
 
-> **NOTE:** The ESP-IDF native build (`idf.py`) targets ESP-IDF **5.1 or later** (5.x and 6.x) on esp32 / esp32s3 / esp32c3 / esp32c6 / esp32h2 / esp32p4. ESP32-C2 / C61 are not supported (no RMT).
+> **NOTE:** The ESP-IDF native build (`idf.py`) targets ESP-IDF **5.1 or later** (5.x and 6.x) on esp32 / esp32s3 / esp32c3 / esp32c5 / esp32c6 / esp32h2 / esp32p4. ESP32-C2 / C61 are not supported (no RMT).
 
 On ESP-IDF native builds (`idf.py`), the unit is selected via Kconfig instead of editing the source. Each example exposes the choice through `main/Kconfig.projbuild`, which sources the Kconfig files in `examples/UnitUnified/common/`:
 
