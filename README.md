@@ -54,11 +54,10 @@ The receivable payload size depends on the **receiver** side:
 
 | Receiver environment | RMT | Default `max_payload_size` | Theoretical max |
 |---|---|---|---|
-| ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3 with Arduino 2.x (ESP-IDF 4.x) | v1 | 23 | 43 (ESP32-S2: 27) |
+| ESP32 / ESP32-S3 / ESP32-C3 with Arduino 2.x (ESP-IDF 4.x) | v1 | 23 | 43 |
 | Arduino 3.x / ESP-IDF 5.x or later | v2 | 255 | 255 |
 
 - Keep the transmitted payload within the receiver's `max_payload_size`, especially when the transmitter is RMT v2 and the receiver is RMT v1.
-- ESP32-S2 with Arduino 2.x uses all RMT memory for receiving, so one device can be a receiver only (no transmitter on the same device).
 - ESP32-S3 / ESP32-C3 with Arduino 2.x (ESP-IDF 4.x) may crash when receiving in noisy RF environments ([esp-idf#13419](https://github.com/espressif/esp-idf/issues/13419)). Arduino 3.x / ESP-IDF 5.x is recommended.
 - For longer data, split it into packets (e.g. 20-30 bytes each with a sequence number) and reassemble on the receiver.
 - At longer distances or in noisy environments, a long frame is more likely to be lost (a single bit error discards the whole frame) or, rarely, to pass the CRC8 check while corrupted. Prefer short packets, repeat them with `burst_transmission_count`, and add your own integrity check (e.g. CRC16) for important data.
