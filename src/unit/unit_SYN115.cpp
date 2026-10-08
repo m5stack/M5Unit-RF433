@@ -91,7 +91,7 @@ bool UnitSYN115::push_back(const uint8_t* data, const uint32_t len)
     if (!data || len == 0) {
         return false;
     }
-    if (_payload_size + len > 255) {
+    if (len > 255u - _payload_size) {
         M5_LIB_LOGE("Payload exceeds max (255 bytes): %u + %u", _payload_size, len);
         return false;
     }

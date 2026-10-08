@@ -20,9 +20,9 @@ item_container_type encodeManchester(const uint8_t* data, uint32_t len, const bo
 {
     item_container_type result{};
     for (uint32_t i = 0; i < len; ++i) {
-        uint8_t byte = data[i];
+        const uint8_t byte = data[i];
         for (int bit = 0; bit < 8; ++bit) {
-            bool b = (byte >> (MSB ? (7 - bit) : bit)) & 1;
+            const bool b = (byte >> (MSB ? (7 - bit) : bit)) & 1;
             result.emplace_back(b ? rmt_item_one : rmt_item_zero);
         }
     }

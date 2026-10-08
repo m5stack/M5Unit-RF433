@@ -140,7 +140,7 @@ bool UnitSYN531R::read_data()
     }
 
     // _rx_buffer is 4-byte aligned and buff = _rx_buffer + RX_FRONT_PAD, so the items at buff + 2 are 4-byte aligned
-    auto* items = reinterpret_cast<m5::unit::gpio::m5_rmt_item_t*>(buff + 2 /* len */);
+    auto* items = reinterpret_cast<const m5::unit::gpio::m5_rmt_item_t*>(buff + 2 /* len */);
 
     // Decode via codec (handles SOF scan, Manchester decode, CRC validation)
     constexpr uint16_t DECODE_BUF_SIZE = 264;

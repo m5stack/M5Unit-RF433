@@ -41,8 +41,8 @@ item_container_type M5Codec::encode(const uint8_t* payload, uint32_t payload_len
     auto payload_items = encodeManchester(payload, payload_len);
 
     // Length (1 byte)
-    uint8_t ps     = static_cast<uint8_t>(payload_len);
-    auto len_items = encodeManchester(&ps, 1);
+    const uint8_t ps = static_cast<uint8_t>(payload_len);
+    auto len_items   = encodeManchester(&ps, 1);
 
     // Send count (1 byte)
     auto count_items = encodeManchester(&_send_count, 1);
@@ -54,8 +54,8 @@ item_container_type M5Codec::encode(const uint8_t* payload, uint32_t payload_len
     // CRC8 (1 byte, payload only)
     m5::utility::CRC8_Checksum crc8;
     crc8.update(payload, payload_len);
-    uint8_t sum    = crc8.value();
-    auto crc_items = encodeManchester(&sum, 1);
+    const uint8_t sum = crc8.value();
+    auto crc_items    = encodeManchester(&sum, 1);
 
     // Build frame: preamble + SOF + CRC8 + ID + Count + Length + Payload + EOF
     buf.insert(buf.end(), std::begin(preamble_array), std::end(preamble_array));
@@ -84,8 +84,8 @@ bool M5Codec::decode(const gpio::m5_rmt_item_t* items, uint32_t num, uint8_t* wo
             continue;
         }
 
-        uint32_t data_start = sof_idx + 1;
-        uint32_t data_items = num - data_start;
+        const uint32_t data_start = sof_idx + 1;
+        const uint32_t data_items = num - data_start;
         if (data_items < 2) {
             continue;
         }
@@ -110,7 +110,7 @@ bool M5Codec::decode(const gpio::m5_rmt_item_t* items, uint32_t num, uint8_t* wo
 
         // Verify CRC8 (payload only)
         m5::utility::CRC8_Checksum crc8;
-        uint8_t calc_crc = crc8.range(work_buf + payload_off, payload_length);
+        const uint8_t calc_crc = crc8.range(work_buf + payload_off, payload_length);
 
         if (calc_crc != read_crc) {
             M5_LIB_LOGD("CRC mismatch at sof@%u: calc=0x%02X read=0x%02X", sof_idx, calc_crc, read_crc);
