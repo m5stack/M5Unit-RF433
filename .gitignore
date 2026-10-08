@@ -39,6 +39,14 @@ build/
 cmake-build-*/
 managed_components/
 
+# ESP-IDF (idf.py) generated per example
+sdkconfig
+sdkconfig.old
+dependencies.lock
+
+# clangd LSP (personal, environment dependent)
+.clangd
+
 # PlatformIO
 .pio/
 

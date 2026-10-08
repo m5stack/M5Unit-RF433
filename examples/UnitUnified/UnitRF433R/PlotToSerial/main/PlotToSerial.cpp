@@ -15,6 +15,7 @@
 #define ESP_IDF_VERSION_VAL(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
 #define ESP_IDF_VERSION                          ESP_IDF_VERSION_VAL(3, 2, 0)
 #endif
+#include <wiring/m5_unit_unified_wiring.hpp>  // board-aware connection helpers (include last)
 
 namespace {
 auto& lcd = M5.Display;
@@ -33,22 +34,17 @@ void setup()
     if (lcd.height() > lcd.width()) {
         lcd.setRotation(1);
     }
-    auto pin_num_gpio_in  = M5.getPin(m5::pin_name_t::port_b_in);
-    auto pin_num_gpio_out = M5.getPin(m5::pin_name_t::port_b_out);
-    if (pin_num_gpio_in < 0 || pin_num_gpio_out < 0) {
-        M5_LOGW("PortB is not available");
-        Wire.end();
-        pin_num_gpio_in  = M5.getPin(m5::pin_name_t::port_a_pin1);
-        pin_num_gpio_out = M5.getPin(m5::pin_name_t::port_a_pin2);
-    }
-    M5_LOGI("getPin: %d,%d", pin_num_gpio_in, pin_num_gpio_out);
 
-    if (!Units.add(unit, pin_num_gpio_in, pin_num_gpio_out) || !Units.begin()) {
+#if defined(M5_UNIT_UNIFIED_HAS_RMT) && !M5_UNIT_UNIFIED_HAS_RMT
+    // UnitRF433 requires the RMT peripheral
+    M5_LOGE("RMT is not supported on this target");
+    m5::unit::wiring::failStop();
+#endif
+
+    // UnitRF433R: RX (input) only, PortB preferred, fallback to PortA
+    if (!m5::unit::wiring::addGPIO(Units, unit, m5::unit::wiring::GpioRole::InOnly) || !Units.begin()) {
         M5_LOGE("Failed to begin");
-        lcd.fillScreen(TFT_RED);
-        while (true) {
-            m5::utility::delay(10000);
-        }
+        m5::unit::wiring::failStop();
     }
 
     // TAG specification by ESP_DRAM_LOGx does not work, so use wildcards
@@ -63,8 +59,6 @@ void setup()
     lcd.setCursor(0, 0);
     lcd.setTextSize(1);
     lcd.print("RX");
-
-    M5.Log.printf("getPin: %d,%d\n", pin_num_gpio_in, pin_num_gpio_out);
 }
 
 void loop()
@@ -92,12 +86,43 @@ void loop()
         latest_send_count = send_count;
 
         M5.Log.printf("RECEIVED: From<%02X> Count:%u Len:%u [%.*s]\n", id, send_count, len, len,
-                      (const char*)(c.data() + 3));
+                      reinterpret_cast<const char*>(c.data() + 3));
         lcd.fillRect(0, 10, lcd.width(), lcd.height() - 10, TFT_DARKCYAN);
         lcd.setCursor(0, 10);
         lcd.setTextSize(1);
-        lcd.printf("%.*s", len, (const char*)(c.data() + 3));
+        lcd.printf("%.*s", len, reinterpret_cast<const char*>(c.data() + 3));
         unit.flush();
         M5.Speaker.tone(2000, 20);
     }
 }
+
+#if !defined(ARDUINO)
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+#include <esp_timer.h>
+
+#if CONFIG_FREERTOS_UNICORE
+static inline void feedIdleTaskPeriodically(void)
+{
+    constexpr uint32_t FEED_INTERVAL_MS{2000};
+    constexpr TickType_t FEED_SLEEP_TICKS{pdMS_TO_TICKS(5)};
+    static uint32_t s_last_feed_ms{};
+    const uint32_t now_ms{static_cast<uint32_t>(esp_timer_get_time() / 1000)};
+    if (now_ms - s_last_feed_ms >= FEED_INTERVAL_MS) {
+        s_last_feed_ms = now_ms;
+        vTaskDelay(FEED_SLEEP_TICKS);
+    }
+}
+#endif
+
+extern "C" void app_main(void)
+{
+    setup();
+    for (;;) {
+#if CONFIG_FREERTOS_UNICORE
+        feedIdleTaskPeriodically();
+#endif
+        loop();
+    }
+}
+#endif

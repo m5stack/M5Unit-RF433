@@ -11,7 +11,6 @@
 #define M5_UNIT_RF433_UNIT_SYN115_HPP
 
 #include <M5UnitComponent.hpp>
-#include <memory>
 #include "codec/m5_codec.hpp"
 
 namespace m5 {
@@ -63,10 +62,24 @@ public:
     //! @brief Update the transmitter unit
     virtual void update(const bool force = false) override;
 
-    //! @brief Get codec (for codec-specific configuration)
-    inline std::shared_ptr<rf433::ProtocolCodec> codec()
+    /*!
+      @brief Get codec (for codec-specific configuration)
+      @return The codec set by setCodec(), or the built-in M5Codec if none is set
+     */
+    inline rf433::ProtocolCodec& codec()
     {
-        return _codec;
+        if (_codec) {
+            return *_codec;
+        }
+        return _default_codec;
+    }
+    //! @copydoc codec()
+    inline const rf433::ProtocolCodec& codec() const
+    {
+        if (_codec) {
+            return *_codec;
+        }
+        return _default_codec;
     }
 
     /*!
@@ -97,17 +110,28 @@ public:
         _payload_size = 0;
     }
 
-    //! @brief Set protocol codec (default: M5Codec)
-    void setCodec(std::shared_ptr<rf433::ProtocolCodec> codec)
+    /*!
+      @brief Set protocol codec
+      @param codec Codec to use. Passing the unit's own built-in codec is the same as resetCodec()
+      @warning Caller must ensure the codec outlives this unit
+     */
+    void setCodec(rf433::ProtocolCodec& codec)
     {
-        _codec = codec;
+        _codec = (&codec == &_default_codec) ? nullptr : &codec;
+    }
+
+    //! @brief Reset to default M5Codec
+    void resetCodec()
+    {
+        _codec = nullptr;
     }
 
 protected:
     TickType_t estimate_tx_timeout_ticks(const rf433::item_container_type& items, const uint32_t margin_ms = 10) const;
 
 private:
-    std::shared_ptr<rf433::ProtocolCodec> _codec{std::make_shared<rf433::M5Codec>()};
+    rf433::M5Codec _default_codec{};
+    rf433::ProtocolCodec* _codec{};  // nullptr: use _default_codec
     std::vector<uint8_t> _payload{};
     uint16_t _payload_size{};
     config_t _cfg{};

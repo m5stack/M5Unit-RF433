@@ -48,6 +48,7 @@ bool UnitSYN115::begin()
         return false;
     }
 
+#if !defined(M5_UNIT_UNIFIED_HAS_RMT) || M5_UNIT_UNIFIED_HAS_RMT
     if (!pinModeTX(gpio::Mode::Output)) {
         return false;
     }
@@ -69,6 +70,10 @@ bool UnitSYN115::begin()
 
     clear();
     return true;
+#else
+    M5_LIB_LOGE("RMT is not supported on this target");
+    return false;
+#endif
 }
 
 void UnitSYN115::update(const bool force)
@@ -86,7 +91,7 @@ bool UnitSYN115::push_back(const uint8_t* data, const uint32_t len)
     if (!data || len == 0) {
         return false;
     }
-    if (_payload_size + len > 255) {
+    if (len > 255u - _payload_size) {
         M5_LIB_LOGE("Payload exceeds max (255 bytes): %u + %u", _payload_size, len);
         return false;
     }
@@ -103,7 +108,7 @@ bool UnitSYN115::send(const uint8_t burst_transmission_count)
     }
 
     // Encode complete frame via codec
-    auto rmt_items = _codec->encode(_payload.data(), _payload_size);
+    auto rmt_items = codec().encode(_payload.data(), _payload_size);
 
     auto wait     = estimate_tx_timeout_ticks(rmt_items);
     uint8_t count = burst_transmission_count ? burst_transmission_count : _cfg.burst_transmission_count;

@@ -136,6 +136,20 @@ TEST(CRC8, ClearResets)
     EXPECT_EQ(crc.value(), v1);
 }
 
+// The wire protocol depends on this CRC8 variant (poly 0x31, init 0xFF, no reflection, no xorout)
+TEST(CRC8, KnownAnswer)
+{
+    const uint8_t check[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    m5::utility::CRC8_Checksum crc1;
+    crc1.update(check, sizeof(check));
+    EXPECT_EQ(crc1.value(), 0xF7);
+
+    const uint8_t beef[] = {0xBE, 0xEF};
+    m5::utility::CRC8_Checksum crc2;
+    crc2.update(beef, sizeof(beef));
+    EXPECT_EQ(crc2.value(), 0x92);
+}
+
 TEST(CRC8, DifferentDataDifferentCRC)
 {
     m5::utility::CRC8_Checksum crc1, crc2;
@@ -460,9 +474,112 @@ TEST(M5CodecEncode, SendCountIncrements)
     EXPECT_EQ(decode_byte(items2, 28), 2u);
 }
 
-TEST(M5CodecEncode, OverheadReturns4)
+TEST(M5CodecEncode, OverheadAndType)
 {
     M5Codec codec;
     EXPECT_EQ(codec.overhead(), 4u);
     EXPECT_EQ(codec.type(), CodecType::M5RF433);
+}
+
+// ============================================================
+// M5Codec Decode (RX-side frames built with buildDecodeItems)
+// ============================================================
+
+// Helper: RX-side items for SOF + CRC8 + ID + Count + Length + Payload
+static std::vector<m5_rmt_item_t> buildFrameItems(const uint8_t id, const uint8_t count, const uint8_t* payload,
+                                                  const uint8_t len, const bool corrupt_crc = false)
+{
+    std::vector<uint8_t> bytes;
+    m5::utility::CRC8_Checksum crc8;
+    crc8.update(payload, len);
+    const uint8_t crc = crc8.value();
+    bytes.push_back(corrupt_crc ? static_cast<uint8_t>(crc ^ 0xFF) : crc);
+    bytes.push_back(id);
+    bytes.push_back(count);
+    bytes.push_back(len);
+    bytes.insert(bytes.end(), payload, payload + len);
+
+    m5_rmt_item_t sof{};
+    sof.level0    = 1;
+    sof.level1    = 0;
+    sof.duration0 = 2480;  // SOF as seen by the receiver
+    sof.duration1 = 1630;
+
+    std::vector<m5_rmt_item_t> items{sof};
+    auto data = buildDecodeItems(bytes.data(), bytes.size());
+    items.insert(items.end(), data.begin(), data.end());
+    return items;
+}
+
+TEST(M5CodecDecode, ExtractsFields)
+{
+    M5Codec codec;
+    const uint8_t payload[] = {'A', 'B', 'C'};
+    auto items              = buildFrameItems(0x5A, 7, payload, sizeof(payload));
+
+    uint8_t work[64]{};
+    DecodeResult result{};
+    EXPECT_TRUE(codec.decode(items.data(), items.size(), work, sizeof(work), result));
+    EXPECT_EQ(result.id, 0x5A);
+    EXPECT_EQ(result.send_count, 7);
+    EXPECT_EQ(result.payload_length, sizeof(payload));
+    EXPECT_EQ(result.payload_offset, ProtocolOverhead);
+    EXPECT_EQ(std::memcmp(work + result.payload_offset, payload, sizeof(payload)), 0);
+}
+
+TEST(M5CodecDecode, SkipsItemsBeforeSof)
+{
+    M5Codec codec;
+    const uint8_t payload[] = {0x12, 0x34};
+    auto frame              = buildFrameItems(0x01, 1, payload, sizeof(payload));
+
+    // AGC noise before the SOF
+    m5_rmt_item_t noise{};
+    noise.level0    = 1;
+    noise.level1    = 0;
+    noise.duration0 = 300;
+    noise.duration1 = 300;
+    std::vector<m5_rmt_item_t> items(5, noise);
+    items.insert(items.end(), frame.begin(), frame.end());
+
+    uint8_t work[64]{};
+    DecodeResult result{};
+    EXPECT_TRUE(codec.decode(items.data(), items.size(), work, sizeof(work), result));
+    EXPECT_EQ(result.payload_length, sizeof(payload));
+    EXPECT_EQ(std::memcmp(work + result.payload_offset, payload, sizeof(payload)), 0);
+}
+
+TEST(M5CodecDecode, RejectsCrcMismatch)
+{
+    M5Codec codec;
+    const uint8_t payload[] = {0x01, 0x02, 0x03};
+    auto items              = buildFrameItems(0x01, 0, payload, sizeof(payload), true);
+
+    uint8_t work[64]{};
+    DecodeResult result{};
+    EXPECT_FALSE(codec.decode(items.data(), items.size(), work, sizeof(work), result));
+}
+
+TEST(M5CodecDecode, RejectsPayloadLargerThanBuffer)
+{
+    M5Codec codec;
+    const uint8_t payload[] = {0x01, 0x02, 0x03};
+    auto items              = buildFrameItems(0x01, 0, payload, sizeof(payload));
+
+    // Header (4) fits, but header + payload (7) does not
+    uint8_t work[5]{};
+    DecodeResult result{};
+    EXPECT_FALSE(codec.decode(items.data(), items.size(), work, sizeof(work), result));
+}
+
+TEST(M5CodecDecode, RejectsWithoutSof)
+{
+    M5Codec codec;
+    const uint8_t payload[] = {0x01, 0x02, 0x03};
+    auto items              = buildFrameItems(0x01, 0, payload, sizeof(payload));
+    items.erase(items.begin());  // drop the SOF
+
+    uint8_t work[64]{};
+    DecodeResult result{};
+    EXPECT_FALSE(codec.decode(items.data(), items.size(), work, sizeof(work), result));
 }

@@ -1,0 +1,17 @@
+# "Target transmitter" selection for the examples that drive an RF433 transmitter (ESP-IDF).
+# rsource'd from UnitRF433T/PlotToSerial/main/Kconfig.projbuild and Transceiver/main/Kconfig.projbuild.
+# The chosen CONFIG_EXAMPLE_USING_* is mapped to the source-level macro in common/variant.cmake
+# (shared with the Arduino build).
+menu "M5Unit-RF433 transmitter example"
+
+choice EXAMPLE_TX_VARIANT
+    prompt "Target transmitter"
+    default EXAMPLE_USING_UNIT_RF433T
+    help
+        Which RF433 transmitter this example drives.
+
+    config EXAMPLE_USING_UNIT_RF433T
+        bool "UnitRF433T (U114, GPIO / GROVE)"
+endchoice
+
+endmenu

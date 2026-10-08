@@ -11,11 +11,14 @@
 #include <M5UnitUnified.hpp>
 #include <googletest/test_template.hpp>
 #include <unit/unit_SYN531R.hpp>
+#include <utility>
 
 using namespace m5::unit::googletest;
 using namespace m5::unit;
 using namespace m5::unit::rf433;
 
+// Unit component tests (requires RMT)
+#if !defined(M5_UNIT_UNIFIED_HAS_RMT) || M5_UNIT_UNIFIED_HAS_RMT
 class TestSYN531R : public GPIOComponentTestBase<UnitSYN531R> {
 protected:
     virtual UnitSYN531R* get_instance() override
@@ -53,16 +56,6 @@ TEST_F(TestSYN531R, DiscardOnEmpty)
     EXPECT_TRUE(unit->empty());
 }
 
-TEST_F(TestSYN531R, Config)
-{
-    SCOPED_TRACE(ustr);
-    auto cfg             = unit->config();
-    cfg.max_payload_size = 10;
-    unit->config(cfg);
-    auto cfg2 = unit->config();
-    EXPECT_EQ(cfg2.max_payload_size, 10);
-}
-
 TEST_F(TestSYN531R, MaxPayloadSize)
 {
     SCOPED_TRACE(ustr);
@@ -76,4 +69,87 @@ TEST_F(TestSYN531R, MaxPayloadSize)
     cfg.max_payload_size = 10;
     unit->config(cfg);
     EXPECT_EQ(unit->config().max_payload_size, 10);
+}
+
+// begin() clamps max_payload_size to the platform limit
+class TestSYN531RBeginConfig : public GPIOComponentTestBase<UnitSYN531R> {
+protected:
+    virtual UnitSYN531R* get_instance() override
+    {
+        auto ptr = new m5::unit::UnitSYN531R();
+        if (ptr) {
+            auto cfg             = ptr->config();
+            cfg.max_payload_size = 255;
+            ptr->config(cfg);
+        }
+        return ptr;
+    }
+};
+
+TEST_F(TestSYN531RBeginConfig, BeginClampsMaxPayloadSize)
+{
+    SCOPED_TRACE(ustr);
+    EXPECT_EQ(unit->config().max_payload_size, rf433::MaxPayloadSize);
+}
+#endif
+
+// Codec pointer must follow the moved-to unit (no hardware required)
+TEST(SYN531RCodec, Move)
+{
+    // Default codec: moved-to unit must refer to its own default codec
+    {
+        UnitSYN531R src;
+        static_cast<M5Codec*>(&src.codec())->setCommunicationIdentifier(0x5A);
+
+        UnitSYN531R dst(std::move(src));
+        EXPECT_EQ(&dst.codec(), &static_cast<const UnitSYN531R&>(dst).codec());
+        EXPECT_NE(&dst.codec(), &src.codec());
+        EXPECT_EQ(static_cast<M5Codec*>(&dst.codec())->communicationIdentifier(), 0x5A);
+
+        UnitSYN531R assigned;
+        auto* old_codec = &assigned.codec();
+        assigned        = std::move(dst);
+        EXPECT_EQ(&assigned.codec(), old_codec);
+        EXPECT_NE(&assigned.codec(), &dst.codec());
+        EXPECT_EQ(static_cast<M5Codec*>(&assigned.codec())->communicationIdentifier(), 0x5A);
+    }
+
+    // External codec: moved-to unit keeps referring to it
+    {
+        M5Codec external{};
+        UnitSYN531R src;
+        src.setCodec(external);
+        EXPECT_EQ(&src.codec(), &external);
+
+        UnitSYN531R dst(std::move(src));
+        EXPECT_EQ(&dst.codec(), &external);
+
+        // Reset returns to the unit's own default codec
+        dst.resetCodec();
+        EXPECT_NE(&dst.codec(), &external);
+        EXPECT_NE(&dst.codec(), &src.codec());
+    }
+
+    // Move-assign onto a unit using an external codec: it returns to its own default codec
+    {
+        M5Codec external{};
+        UnitSYN531R src;
+        UnitSYN531R assigned;
+        auto* own_codec = &assigned.codec();
+        assigned.setCodec(external);
+        EXPECT_EQ(&assigned.codec(), &external);
+
+        assigned = std::move(src);
+        EXPECT_EQ(&assigned.codec(), own_codec);
+        EXPECT_NE(&assigned.codec(), &external);
+        EXPECT_NE(&assigned.codec(), &src.codec());
+    }
+
+    // setCodec() with the unit's own built-in codec stays move-safe
+    {
+        UnitSYN531R src;
+        src.setCodec(src.codec());
+        UnitSYN531R dst(std::move(src));
+        EXPECT_NE(&dst.codec(), &src.codec());
+    }
 }
