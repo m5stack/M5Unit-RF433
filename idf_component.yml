@@ -2,7 +2,7 @@ description: Library for M5Stack UNIT RF433 (RF433T / RF433R) using M5UnitUnifie
 url: https://github.com/m5stack/M5Unit-RF433
 issues: https://github.com/m5stack/M5Unit-RF433/issues
 license: MIT
-version: "0.1.0"
+version: "0.2.0"
 
 dependencies:
   idf: ">=5.1"
