@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.2.0 git rev:ed9ef39</span>
    </div>
   </td>
  </tr>
@@ -132,10 +132,12 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () 
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (const bool force=false) override</td></tr>
 <tr class="memdesc:abf17f5d52c33719e16ee3c0460c632b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the transmitter unit. <br /></td></tr>
 <tr class="separator:abf17f5d52c33719e16ee3c0460c632b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae16923143fba1f64dd07ab77f06cd4b8" id="r_ae16923143fba1f64dd07ab77f06cd4b8"><td class="memItemLeft" align="right" valign="top"><a id="ae16923143fba1f64dd07ab77f06cd4b8" name="ae16923143fba1f64dd07ab77f06cd4b8"></a>
-std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>codec</b> ()</td></tr>
-<tr class="memdesc:ae16923143fba1f64dd07ab77f06cd4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get codec (for codec-specific configuration) <br /></td></tr>
-<tr class="separator:ae16923143fba1f64dd07ab77f06cd4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41746f630075525248eb663f34f10234" id="r_a41746f630075525248eb663f34f10234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41746f630075525248eb663f34f10234">codec</a> ()</td></tr>
+<tr class="memdesc:a41746f630075525248eb663f34f10234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get codec (for codec-specific configuration)  <br /></td></tr>
+<tr class="separator:a41746f630075525248eb663f34f10234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31b8f6e3602cde41f5c8b0c46cb4df00" id="r_a31b8f6e3602cde41f5c8b0c46cb4df00"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31b8f6e3602cde41f5c8b0c46cb4df00">codec</a> () const</td></tr>
+<tr class="memdesc:a31b8f6e3602cde41f5c8b0c46cb4df00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get codec (for codec-specific configuration)     <br /></td></tr>
+<tr class="separator:a31b8f6e3602cde41f5c8b0c46cb4df00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61d5c484efe699417f84a79d4f41be51" id="r_a61d5c484efe699417f84a79d4f41be51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61d5c484efe699417f84a79d4f41be51">push_back</a> (const uint8_t *data, const uint32_t len)</td></tr>
 <tr class="memdesc:a61d5c484efe699417f84a79d4f41be51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push back data to payload.  <br /></td></tr>
 <tr class="separator:a61d5c484efe699417f84a79d4f41be51"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,10 +148,13 @@ std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_co
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="memdesc:a9dfdd2ec4ef686b087677b0812abc452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear inner buffer. <br /></td></tr>
 <tr class="separator:a9dfdd2ec4ef686b087677b0812abc452"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3325cd7544cd6e9de22636f6af92e57" id="r_ab3325cd7544cd6e9de22636f6af92e57"><td class="memItemLeft" align="right" valign="top"><a id="ab3325cd7544cd6e9de22636f6af92e57" name="ab3325cd7544cd6e9de22636f6af92e57"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCodec</b> (std::shared_ptr&lt; <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &gt; <a class="el" href="#ae16923143fba1f64dd07ab77f06cd4b8">codec</a>)</td></tr>
-<tr class="memdesc:ab3325cd7544cd6e9de22636f6af92e57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set protocol codec (default: M5Codec) <br /></td></tr>
-<tr class="separator:ab3325cd7544cd6e9de22636f6af92e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f2c20e698bbfbc8a622240e174e88a" id="r_a39f2c20e698bbfbc8a622240e174e88a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39f2c20e698bbfbc8a622240e174e88a">setCodec</a> (<a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &amp;<a class="el" href="#a41746f630075525248eb663f34f10234">codec</a>)</td></tr>
+<tr class="memdesc:a39f2c20e698bbfbc8a622240e174e88a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set protocol codec.  <br /></td></tr>
+<tr class="separator:a39f2c20e698bbfbc8a622240e174e88a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a220d85d1fa0582cfdf1ba0a904cf1a1f" id="r_a220d85d1fa0582cfdf1ba0a904cf1a1f"><td class="memItemLeft" align="right" valign="top"><a id="a220d85d1fa0582cfdf1ba0a904cf1a1f" name="a220d85d1fa0582cfdf1ba0a904cf1a1f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>resetCodec</b> ()</td></tr>
+<tr class="memdesc:a220d85d1fa0582cfdf1ba0a904cf1a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset to default M5Codec. <br /></td></tr>
+<tr class="separator:a220d85d1fa0582cfdf1ba0a904cf1a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Configuration for begin</div></td></tr>
 <tr class="memitem:acd4db1477545b010aadb3f99e6fe9dde" id="r_acd4db1477545b010aadb3f99e6fe9dde"><td class="memItemLeft" align="right" valign="top"><a id="acd4db1477545b010aadb3f99e6fe9dde" name="acd4db1477545b010aadb3f99e6fe9dde"></a>
 <a class="el" href="structm5_1_1unit_1_1_unit_s_y_n115_1_1config__t.html">config_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>config</b> ()</td></tr>
@@ -170,6 +175,62 @@ TickType_t&#160;</td><td class="memItemRight" valign="bottom"><b>estimate_tx_tim
 <div class="textblock"><p>SYN115 unit. </p>
 <p>RF433 Transmitter </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a41746f630075525248eb663f34f10234" name="a41746f630075525248eb663f34f10234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41746f630075525248eb663f34f10234">&#9670;&#160;</a></span>codec() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &amp; m5::unit::UnitSYN115::codec </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get codec (for codec-specific configuration) </p>
+<dl class="section return"><dt>Returns</dt><dd>The codec set by <a class="el" href="#a39f2c20e698bbfbc8a622240e174e88a" title="Set protocol codec.">setCodec()</a>, or the built-in M5Codec if none is set </dd></dl>
+
+</div>
+</div>
+<a id="a31b8f6e3602cde41f5c8b0c46cb4df00" name="a31b8f6e3602cde41f5c8b0c46cb4df00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31b8f6e3602cde41f5c8b0c46cb4df00">&#9670;&#160;</a></span>codec() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &amp; m5::unit::UnitSYN115::codec </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get codec (for codec-specific configuration)    </p>
+<dl class="section return"><dt>Returns</dt><dd>The codec set by <a class="el" href="#a39f2c20e698bbfbc8a622240e174e88a" title="Set protocol codec.">setCodec()</a>, or the built-in M5Codec if none is set    </dd></dl>
+
+</div>
+</div>
 <a id="a61d5c484efe699417f84a79d4f41be51" name="a61d5c484efe699417f84a79d4f41be51"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a61d5c484efe699417f84a79d4f41be51">&#9670;&#160;</a></span>push_back()</h2>
 
@@ -227,6 +288,40 @@ TickType_t&#160;</td><td class="memItemRight" valign="bottom"><b>estimate_tx_tim
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if successful </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The payload will be empty if successful </dd></dl>
+
+</div>
+</div>
+<a id="a39f2c20e698bbfbc8a622240e174e88a" name="a39f2c20e698bbfbc8a622240e174e88a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39f2c20e698bbfbc8a622240e174e88a">&#9670;&#160;</a></span>setCodec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void m5::unit::UnitSYN115::setCodec </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classm5_1_1unit_1_1rf433_1_1_protocol_codec.html">rf433::ProtocolCodec</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>codec</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set protocol codec. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">codec</td><td>Codec to use. Passing the unit's own built-in codec is the same as <a class="el" href="#a220d85d1fa0582cfdf1ba0a904cf1a1f" title="Reset to default M5Codec.">resetCodec()</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>Caller must ensure the codec outlives this unit </dd></dl>
 
 </div>
 </div>

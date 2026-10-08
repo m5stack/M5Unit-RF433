@@ -8,5 +8,6 @@ var rmt__item__types_8hpp =
     [ "encodeManchester", "rmt__item__types_8hpp.html#abb60b348f068799d179145deeddbcd3f", null ],
     [ "MaxPayloadSize", "rmt__item__types_8hpp.html#a5f39c6faf77ec83a9e1001900523d451", null ],
     [ "ProtocolOverhead", "rmt__item__types_8hpp.html#aea0e019098367431997447b81408d9b6", null ],
-    [ "RmtRxMaxItems", "rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8", null ]
+    [ "RmtRxMaxItems", "rmt__item__types_8hpp.html#adfab107f20443d36427aa94aa6ab20d8", null ],
+    [ "RmtRxMemBlocks", "rmt__item__types_8hpp.html#aa04d30d463335dd922443b79bd26e9cc", null ]
 ];

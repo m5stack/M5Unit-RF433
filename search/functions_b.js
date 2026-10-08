@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update_0',['update',['../classm5_1_1unit_1_1_unit_s_y_n115.html#abf17f5d52c33719e16ee3c0460c632b3',1,'m5::unit::UnitSYN115::update()'],['../classm5_1_1unit_1_1_unit_s_y_n531_r.html#a75afbf3d147acfc437789ad5fead791e',1,'m5::unit::UnitSYN531R::update()']]]
+  ['type_0',['type',['../classm5_1_1unit_1_1rf433_1_1_protocol_codec.html#a646fd1f8077680cf63a23cdb0a974dd5',1,'m5::unit::rf433::ProtocolCodec']]]
 ];

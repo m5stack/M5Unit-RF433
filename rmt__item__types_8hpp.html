@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.1.0 git rev:5415b86</span>
+   <div id="projectname">M5Unit-RF433<span id="projectnumber">&#160;0.2.0 git rev:ed9ef39</span>
    </div>
   </td>
  </tr>
@@ -150,7 +150,10 @@ Variables</h2></td></tr>
 constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit::rf433::ProtocolOverhead</b> = 4</td></tr>
 <tr class="memdesc:aea0e019098367431997447b81408d9b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Protocol overhead in bytes: CRC8(1) + ID(1) + Count(1) + Length(1) = 4. <br /></td></tr>
 <tr class="separator:aea0e019098367431997447b81408d9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfab107f20443d36427aa94aa6ab20d8" id="r_adfab107f20443d36427aa94aa6ab20d8"><td class="memItemLeft" align="right" valign="top">constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a> = 6 * 64</td></tr>
+<tr class="memitem:aa04d30d463335dd922443b79bd26e9cc" id="r_aa04d30d463335dd922443b79bd26e9cc"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa04d30d463335dd922443b79bd26e9cc">m5::unit::rf433::RmtRxMemBlocks</a> = 6</td></tr>
+<tr class="memdesc:aa04d30d463335dd922443b79bd26e9cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">RMT memory blocks used by the RX channel per platform.  <br /></td></tr>
+<tr class="separator:aa04d30d463335dd922443b79bd26e9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfab107f20443d36427aa94aa6ab20d8" id="r_adfab107f20443d36427aa94aa6ab20d8"><td class="memItemLeft" align="right" valign="top">constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a> = <a class="el" href="#aa04d30d463335dd922443b79bd26e9cc">RmtRxMemBlocks</a> * 64</td></tr>
 <tr class="memdesc:adfab107f20443d36427aa94aa6ab20d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum RMT items receivable in a single frame per platform.  <br /></td></tr>
 <tr class="separator:adfab107f20443d36427aa94aa6ab20d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f39c6faf77ec83a9e1001900523d451" id="r_a5f39c6faf77ec83a9e1001900523d451"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f39c6faf77ec83a9e1001900523d451">m5::unit::rf433::MaxPayloadSize</a></td></tr>
@@ -309,12 +312,13 @@ constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line">    <span class="keyword">static_cast&lt;</span>uint8_t<span class="keyword">&gt;</span>((<a class="code hl_variable" href="#adfab107f20443d36427aa94aa6ab20d8">RmtRxMaxItems</a> - 1 ) / 8 - ProtocolOverhead)</div>
-<div class="ttc" id="armt__item__types_8hpp_html_adfab107f20443d36427aa94aa6ab20d8"><div class="ttname"><a href="#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a></div><div class="ttdeci">constexpr uint16_t RmtRxMaxItems</div><div class="ttdoc">Maximum RMT items receivable in a single frame per platform.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:51</div></div>
+<div class="ttc" id="armt__item__types_8hpp_html_adfab107f20443d36427aa94aa6ab20d8"><div class="ttname"><a href="#adfab107f20443d36427aa94aa6ab20d8">m5::unit::rf433::RmtRxMaxItems</a></div><div class="ttdeci">constexpr uint16_t RmtRxMaxItems</div><div class="ttdoc">Maximum RMT items receivable in a single frame per platform.</div><div class="ttdef"><b>Definition</b> rmt_item_types.hpp:75</div></div>
 </div><!-- fragment -->
 <p>Theoretical maximum payload size in bytes for the current platform. </p>
 <p>Calculated from RmtRxMaxItems with protocol overhead (4 bytes). This is the theoretical limit based on RMT hardware memory. In practice, AGC noise from the SYN531R receiver consumes RMT items, reducing the usable capacity. Theoretical values:</p><ul>
 <li>ESP32: 43 bytes (practical safe limit ~23 bytes)</li>
-<li>ESP32-S3: 43 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)</li>
+<li>ESP32-S2: 27 bytes</li>
+<li>ESP32-S3 / ESP32-C3: 43 bytes (1 mem_block + threshold ISR wrapping; practical safe limit ~23 bytes)</li>
 <li>ESP-IDF 5.x (RMT v2): 255 bytes <dl class="section warning"><dt>Warning</dt><dd>When communicating between RMT v1 (ESP-IDF 4.x) and RMT v2 (ESP-IDF 5.x) devices, the payload size must not exceed the receiver's limit. A v2 transmitter can send up to 255 bytes, but a v1 receiver's capacity is much smaller and varies depending on AGC noise conditions. Always limit the payload to the receiver's max_payload_size. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd>UnitSYN531R::config_t::max_payload_size for the configurable runtime limit </dd></dl>
 </li>
@@ -332,7 +336,7 @@ constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t m5::unit::rf433::RmtRxMaxItems = 6 * 64</td>
+          <td class="memname">uint16_t m5::unit::rf433::RmtRxMaxItems = RmtRxMemBlocks * 64</td>
         </tr>
       </table>
   </td>
@@ -345,10 +349,41 @@ constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>m5::unit
 <p>Maximum RMT items receivable in a single frame per platform. </p>
 <ul>
 <li>ESP32 (RMT v1): 6 mem_blocks x 64 = 384 items</li>
-<li>ESP32-S3 (RMT v1): 1 mem_block x 48 = 48 items (threshold ISR wrapping)</li>
+<li>ESP32-S2 (RMT v1): 4 mem_blocks x 64 = 256 items (all 4 channels can receive)</li>
+<li>ESP32-S3 / ESP32-C3 (RMT v1): 1 mem_block x 48 = 48 items (RX ping-pong: threshold ISR wrapping)</li>
 <li>ESP-IDF 5.x (RMT v2): ping-pong/DMA, limited by user buffer only <dl class="section note"><dt>Note</dt><dd>RF433 ASK receivers (SYN531R) generate AGC noise before the SOF, consuming part of the RMT memory. The maximum payload must fit within a single RMT hardware frame to avoid truncation. </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>ESP32-S3 + ESP-IDF 4.x has a known RMT RX ping-pong bug that may cause memory corruption and crash in noisy RF environments. See <a href="https://github.com/espressif/esp-idf/issues/13419">https://github.com/espressif/esp-idf/issues/13419</a> Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3. ESP32: 8ch x 64 items, use 6 = 384 </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: the RMT RX ping-pong path of the legacy driver may cause memory corruption and crash in noisy RF environments. See <a href="https://github.com/espressif/esp-idf/issues/13419">https://github.com/espressif/esp-idf/issues/13419</a> Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3 / ESP32-C3. </dd></dl>
 </li>
+</ul>
+
+</div>
+</div>
+<a id="aa04d30d463335dd922443b79bd26e9cc" name="aa04d30d463335dd922443b79bd26e9cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa04d30d463335dd922443b79bd26e9cc">&#9670;&#160;</a></span>RmtRxMemBlocks</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t m5::unit::rf433::RmtRxMemBlocks = 6</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>RMT memory blocks used by the RX channel per platform. </p>
+<ul>
+<li>ESP32 (RMT v1): 6 (the remaining blocks are left for TX)</li>
+<li>ESP32-S2 (RMT v1): 4 (all blocks; no block is left for TX, so a device can only receive)</li>
+<li>ESP32-S3 / ESP32-C3 (RMT v1): 1 (RX ping-pong: threshold ISR wrapping)</li>
+<li>ESP-IDF 5.x (RMT v2): 2 </li>
 </ul>
 
 </div>
