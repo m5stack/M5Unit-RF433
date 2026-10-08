@@ -51,7 +51,7 @@ The receivable payload size depends on the **receiver** side:
 | Receiver environment | RMT | Default `max_payload_size` | Theoretical max |
 |---|---|---|---|
 | ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3 with Arduino 2.x (ESP-IDF 4.x) | v1 | 23 | 43 (ESP32-S2: 27) |
-| Arduino 3.x / ESP-IDF 5.x or later | v2 | 255 (needs M5UnitUnified >= 0.6.0 for over about 120 bytes) | 255 |
+| Arduino 3.x / ESP-IDF 5.x or later | v2 | 255 | 255 |
 
 - Keep the transmitted payload within the receiver's `max_payload_size`, especially when the transmitter is RMT v2 and the receiver is RMT v1.
 - For longer data, split it into packets (e.g. 20-30 bytes each with a sequence number) and reassemble on the receiver.
