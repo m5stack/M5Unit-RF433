@@ -86,11 +86,11 @@ void loop()
         latest_send_count = send_count;
 
         M5.Log.printf("RECEIVED: From<%02X> Count:%u Len:%u [%.*s]\n", id, send_count, len, len,
-                      (const char*)(c.data() + 3));
+                      reinterpret_cast<const char*>(c.data() + 3));
         lcd.fillRect(0, 10, lcd.width(), lcd.height() - 10, TFT_DARKCYAN);
         lcd.setCursor(0, 10);
         lcd.setTextSize(1);
-        lcd.printf("%.*s", len, (const char*)(c.data() + 3));
+        lcd.printf("%.*s", len, reinterpret_cast<const char*>(c.data() + 3));
         unit.flush();
         M5.Speaker.tone(2000, 20);
     }
