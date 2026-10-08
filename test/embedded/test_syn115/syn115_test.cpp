@@ -27,7 +27,7 @@ protected:
         auto ptr = new m5::unit::UnitSYN115();
         if (ptr) {
             auto cfg           = ptr->config();
-            cfg.send_in_update = false;  // Prevent auto-send during update()
+            cfg.send_in_update = false;  // Explicitly ensure no auto-send during update() (default is false)
             ptr->config(cfg);
         }
         return ptr;
@@ -120,6 +120,40 @@ TEST_F(TestSYN115, SendEmpty)
 {
     SCOPED_TRACE(ustr);
     // send() without push_back should return false
+    EXPECT_FALSE(unit->send());
+}
+
+TEST_F(TestSYN115, PushBackInvalidArguments)
+{
+    SCOPED_TRACE(ustr);
+    uint8_t data[] = {0x01, 0x02, 0x03};
+    EXPECT_FALSE(unit->push_back(nullptr, sizeof(data)));
+    EXPECT_FALSE(unit->push_back(data, 0));
+    // Nothing was queued
+    EXPECT_FALSE(unit->send());
+}
+
+class TestSYN115SendInUpdate : public GPIOComponentTestBase<UnitSYN115> {
+protected:
+    virtual UnitSYN115* get_instance() override
+    {
+        auto ptr = new m5::unit::UnitSYN115();
+        if (ptr) {
+            auto cfg           = ptr->config();
+            cfg.send_in_update = true;
+            ptr->config(cfg);
+        }
+        return ptr;
+    }
+};
+
+TEST_F(TestSYN115SendInUpdate, UpdateSendsAndClears)
+{
+    SCOPED_TRACE(ustr);
+    uint8_t data[] = {0x01, 0x02, 0x03};
+    EXPECT_TRUE(unit->push_back(data, sizeof(data)));
+    // update() transmits the queued payload (no receiver needed) and clears it
+    unit->update();
     EXPECT_FALSE(unit->send());
 }
 #endif

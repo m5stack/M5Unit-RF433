@@ -56,16 +56,6 @@ TEST_F(TestSYN531R, DiscardOnEmpty)
     EXPECT_TRUE(unit->empty());
 }
 
-TEST_F(TestSYN531R, Config)
-{
-    SCOPED_TRACE(ustr);
-    auto cfg             = unit->config();
-    cfg.max_payload_size = 10;
-    unit->config(cfg);
-    auto cfg2 = unit->config();
-    EXPECT_EQ(cfg2.max_payload_size, 10);
-}
-
 TEST_F(TestSYN531R, MaxPayloadSize)
 {
     SCOPED_TRACE(ustr);
@@ -79,6 +69,27 @@ TEST_F(TestSYN531R, MaxPayloadSize)
     cfg.max_payload_size = 10;
     unit->config(cfg);
     EXPECT_EQ(unit->config().max_payload_size, 10);
+}
+
+// begin() clamps max_payload_size to the platform limit
+class TestSYN531RBeginConfig : public GPIOComponentTestBase<UnitSYN531R> {
+protected:
+    virtual UnitSYN531R* get_instance() override
+    {
+        auto ptr = new m5::unit::UnitSYN531R();
+        if (ptr) {
+            auto cfg             = ptr->config();
+            cfg.max_payload_size = 255;
+            ptr->config(cfg);
+        }
+        return ptr;
+    }
+};
+
+TEST_F(TestSYN531RBeginConfig, BeginClampsMaxPayloadSize)
+{
+    SCOPED_TRACE(ustr);
+    EXPECT_EQ(unit->config().max_payload_size, rf433::MaxPayloadSize);
 }
 #endif
 
