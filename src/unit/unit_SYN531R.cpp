@@ -85,13 +85,13 @@ bool UnitSYN531R::begin()
     cfg.mode          = Mode::RmtRX;
     cfg.rx.tick_ns    = 1000;  // 1 tick = 1us
     cfg.rx.mem_blocks = RmtRxMemBlocks;
-#if !defined(M5_UNIT_UNIFIED_USING_RMT_V2) && defined(CONFIG_IDF_TARGET_ESP32S3)
-    // ESP32-S3 + ESP-IDF 4.x: RMT RX ping-pong has a known bug that causes memory corruption
+#if !defined(M5_UNIT_UNIFIED_USING_RMT_V2) && defined(SOC_RMT_SUPPORT_RX_PINGPONG) && SOC_RMT_SUPPORT_RX_PINGPONG
+    // ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: the RMT RX ping-pong path of the legacy driver can corrupt memory
     // and crash in noisy RF environments. See: https://github.com/espressif/esp-idf/issues/13419
     // Using mem_blocks=1 to minimize exposure, but crashes may still occur.
-    // Recommended: use ESP-IDF 5.x (pioarduino) which has RMT v2 with the fix.
+    // Recommended: use ESP-IDF 5.x (pioarduino) which uses RMT v2.
     M5_LIB_LOGW(
-        "ESP32-S3 + ESP-IDF 4.x: RMT RX may crash in noisy environments (esp-idf#13419). "
+        "ESP32-S3/C3 + ESP-IDF 4.x: RMT RX may crash in noisy environments (esp-idf#13419). "
         "Consider using ESP-IDF 5.x (pioarduino)");
 #endif
     cfg.rx.ring_buffer_size       = buf_bytes;

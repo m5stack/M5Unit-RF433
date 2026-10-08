@@ -38,7 +38,7 @@ constexpr uint8_t ProtocolOverhead = 4;
   @brief RMT memory blocks used by the RX channel per platform
   @details
   - ESP32 (RMT v1): 6 (the remaining blocks are left for TX)
-  - ESP32-S2 (RMT v1): 4 (all 4 channels can receive)
+  - ESP32-S2 (RMT v1): 4 (all blocks; no block is left for TX, so a device can only receive)
   - ESP32-S3 / ESP32-C3 (RMT v1): 1 (RX ping-pong: threshold ISR wrapping)
   - ESP-IDF 5.x (RMT v2): 2
  */
@@ -62,9 +62,9 @@ constexpr uint8_t RmtRxMemBlocks = 6;  // Host (native) build: same as ESP32
   - ESP-IDF 5.x (RMT v2): ping-pong/DMA, limited by user buffer only
   @note RF433 ASK receivers (SYN531R) generate AGC noise before the SOF, consuming part of the RMT memory.
   The maximum payload must fit within a single RMT hardware frame to avoid truncation.
-  @warning ESP32-S3 + ESP-IDF 4.x has a known RMT RX ping-pong bug that may cause memory corruption
-  and crash in noisy RF environments. See https://github.com/espressif/esp-idf/issues/13419
-  Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3.
+  @warning ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: the RMT RX ping-pong path of the legacy driver may cause
+  memory corruption and crash in noisy RF environments. See https://github.com/espressif/esp-idf/issues/13419
+  Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3 / ESP32-C3.
  */
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
 constexpr uint16_t RmtRxMaxItems = 4096;  // RMT v2: ping-pong/DMA handles large frames
