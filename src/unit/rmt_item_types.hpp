@@ -35,6 +35,25 @@ using communication_identifier_t = uint8_t;                           //!< Commu
 constexpr uint8_t ProtocolOverhead = 4;
 
 /*!
+  @brief RMT memory blocks used by the RX channel per platform
+  @details
+  - ESP32 (RMT v1): 6 (the remaining blocks are left for TX)
+  - ESP32-S2 (RMT v1): 4 (all 4 channels can receive)
+  - ESP32-S3 / ESP32-C3 (RMT v1): 1 (RX ping-pong: threshold ISR wrapping)
+  - ESP-IDF 5.x (RMT v2): 2
+ */
+#if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
+constexpr uint8_t RmtRxMemBlocks = 2;
+#elif defined(SOC_RMT_SUPPORT_RX_PINGPONG) && SOC_RMT_SUPPORT_RX_PINGPONG
+constexpr uint8_t RmtRxMemBlocks = 1;
+#elif defined(SOC_RMT_RX_CANDIDATES_PER_GROUP)
+// RX channels are the last SOC_RMT_RX_CANDIDATES_PER_GROUP ones and their blocks must stay within the group
+constexpr uint8_t RmtRxMemBlocks = (SOC_RMT_RX_CANDIDATES_PER_GROUP < 6) ? SOC_RMT_RX_CANDIDATES_PER_GROUP : 6;
+#else
+constexpr uint8_t RmtRxMemBlocks = 6;  // Host (native) build: same as ESP32
+#endif
+
+/*!
   @brief Maximum RMT items receivable in a single frame per platform
   @details
   - ESP32 (RMT v1): 6 mem_blocks x 64 = 384 items
@@ -48,19 +67,12 @@ constexpr uint8_t ProtocolOverhead = 4;
   Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3.
  */
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
-constexpr uint8_t RmtRxMemBlocks = 2;     //!< RMT v2: memory blocks for the RX channel
-constexpr uint16_t RmtRxMaxItems = 4096;  //!< RMT v2: ping-pong/DMA handles large frames
-#elif defined(SOC_RMT_SUPPORT_RX_PINGPONG) && SOC_RMT_SUPPORT_RX_PINGPONG
-constexpr uint8_t RmtRxMemBlocks = 1;  //!< ESP32-S3 / ESP32-C3: 1 mem_block (threshold ISR handles wrapping)
-constexpr uint16_t RmtRxMaxItems = RmtRxMemBlocks * SOC_RMT_MEM_WORDS_PER_CHANNEL;  //!< 48 items
-#elif defined(SOC_RMT_RX_CANDIDATES_PER_GROUP)
-// RX channels are the last SOC_RMT_RX_CANDIDATES_PER_GROUP ones and their blocks must stay within the group
-constexpr uint8_t RmtRxMemBlocks =
-    (SOC_RMT_RX_CANDIDATES_PER_GROUP < 6) ? SOC_RMT_RX_CANDIDATES_PER_GROUP : 6;    //!< ESP32: 6, ESP32-S2: 4
-constexpr uint16_t RmtRxMaxItems = RmtRxMemBlocks * SOC_RMT_MEM_WORDS_PER_CHANNEL;  //!< ESP32: 384, ESP32-S2: 256
+constexpr uint16_t RmtRxMaxItems = 4096;  // RMT v2: ping-pong/DMA handles large frames
+#elif defined(SOC_RMT_MEM_WORDS_PER_CHANNEL)
+constexpr uint16_t RmtRxMaxItems =
+    RmtRxMemBlocks * SOC_RMT_MEM_WORDS_PER_CHANNEL;  // ESP32: 384, ESP32-S2: 256, ESP32-S3 / ESP32-C3: 48
 #else
-constexpr uint8_t RmtRxMemBlocks = 6;       //!< Host (native) build: same as ESP32
-constexpr uint16_t RmtRxMaxItems = 6 * 64;  //!< Host (native) build: same as ESP32
+constexpr uint16_t RmtRxMaxItems = RmtRxMemBlocks * 64;  // Host (native) build: same as ESP32
 #endif
 
 /*!
