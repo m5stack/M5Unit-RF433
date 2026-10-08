@@ -175,4 +175,12 @@ TEST(SYN115Codec, Move)
         EXPECT_NE(&assigned.codec(), &external);
         EXPECT_NE(&assigned.codec(), &src.codec());
     }
+
+    // setCodec() with the unit's own built-in codec stays move-safe
+    {
+        UnitSYN115 src;
+        src.setCodec(src.codec());
+        UnitSYN115 dst(std::move(src));
+        EXPECT_NE(&dst.codec(), &src.codec());
+    }
 }

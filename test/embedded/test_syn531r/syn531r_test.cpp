@@ -133,4 +133,12 @@ TEST(SYN531RCodec, Move)
         EXPECT_NE(&assigned.codec(), &external);
         EXPECT_NE(&assigned.codec(), &src.codec());
     }
+
+    // setCodec() with the unit's own built-in codec stays move-safe
+    {
+        UnitSYN531R src;
+        src.setCodec(src.codec());
+        UnitSYN531R dst(std::move(src));
+        EXPECT_NE(&dst.codec(), &src.codec());
+    }
 }

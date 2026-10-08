@@ -62,7 +62,10 @@ public:
     //! @brief Update the transmitter unit
     virtual void update(const bool force = false) override;
 
-    //! @brief Get codec (for codec-specific configuration)
+    /*!
+      @brief Get codec (for codec-specific configuration)
+      @return The codec set by setCodec(), or the built-in M5Codec if none is set
+     */
     inline rf433::ProtocolCodec& codec()
     {
         if (_codec) {
@@ -70,7 +73,7 @@ public:
         }
         return _default_codec;
     }
-    //! @brief Get codec (for codec-specific configuration)
+    //! @copydoc codec()
     inline const rf433::ProtocolCodec& codec() const
     {
         if (_codec) {
@@ -107,11 +110,14 @@ public:
         _payload_size = 0;
     }
 
-    //! @brief Set protocol codec
-    //! @warning Caller must ensure the codec outlives this unit
+    /*!
+      @brief Set protocol codec
+      @param codec Codec to use. Passing the unit's own built-in codec is the same as resetCodec()
+      @warning Caller must ensure the codec outlives this unit
+     */
     void setCodec(rf433::ProtocolCodec& codec)
     {
-        _codec = &codec;
+        _codec = (&codec == &_default_codec) ? nullptr : &codec;
     }
 
     //! @brief Reset to default M5Codec
