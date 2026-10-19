@@ -39,7 +39,7 @@ constexpr uint8_t ProtocolOverhead = 4;
   @details
   - ESP32 (RMT v1): 6 (the remaining blocks are left for TX)
   - ESP32-S2 (RMT v1): 4 (all blocks; no block is left for TX, so a device can only receive)
-  - ESP32-S3 / ESP32-C3 (RMT v1): 1 (RX ping-pong: threshold ISR wrapping)
+  - ESP32-S3 / ESP32-C3 (RMT v1): 1 (frames longer than the RMT memory are received with RX ping-pong)
   - ESP-IDF 5.x (RMT v2): 2
  */
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)
@@ -58,12 +58,14 @@ constexpr uint8_t RmtRxMemBlocks = 6;  // Host (native) build: same as ESP32
   @details
   - ESP32 (RMT v1): 6 mem_blocks x 64 = 384 items
   - ESP32-S2 (RMT v1): 4 mem_blocks x 64 = 256 items (all 4 channels can receive)
-  - ESP32-S3 / ESP32-C3 (RMT v1): 1 mem_block x 48 = 48 items (RX ping-pong: threshold ISR wrapping)
+  - ESP32-S3 / ESP32-C3 (RMT v1): 1 mem_block x 48 = 48 items (RX ping-pong extends a frame up to the receive
+    buffer)
   - ESP-IDF 5.x (RMT v2): ping-pong/DMA, limited by user buffer only
   @note RF433 ASK receivers (SYN531R) generate AGC noise before the SOF, consuming part of the RMT memory.
   The maximum payload must fit within a single RMT hardware frame to avoid truncation.
-  @warning ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: the RMT RX ping-pong path of the legacy driver may cause
-  memory corruption and crash in noisy RF environments. See https://github.com/espressif/esp-idf/issues/13419
+  @warning ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: with RX ping-pong, the legacy driver overruns its receive buffer
+  and corrupts memory when a frame outgrows the buffer (e.g. noise that never goes idle).
+  See https://github.com/espressif/esp-idf/issues/13419
   Recommended to use ESP-IDF 5.x (pioarduino) for ESP32-S3 / ESP32-C3.
  */
 #if defined(M5_UNIT_UNIFIED_USING_RMT_V2)

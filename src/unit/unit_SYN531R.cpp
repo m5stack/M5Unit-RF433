@@ -86,13 +86,14 @@ bool UnitSYN531R::begin()
     cfg.rx.tick_ns    = 1000;  // 1 tick = 1us
     cfg.rx.mem_blocks = RmtRxMemBlocks;
 #if !defined(M5_UNIT_UNIFIED_USING_RMT_V2) && defined(SOC_RMT_SUPPORT_RX_PINGPONG) && SOC_RMT_SUPPORT_RX_PINGPONG
-    // ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: the RMT RX ping-pong path of the legacy driver can corrupt memory
-    // and crash in noisy RF environments. See: https://github.com/espressif/esp-idf/issues/13419
-    // Using mem_blocks=1 to minimize exposure, but crashes may still occur.
+    // ESP32-S3 / ESP32-C3 + ESP-IDF 4.x: a frame does not fit in 1 mem_block (48 items), so receive with ping-pong.
+    // The legacy driver overruns its receive buffer and corrupts memory when a frame outgrows ring_buffer_size
+    // (e.g. noise that never goes idle). See: https://github.com/espressif/esp-idf/issues/13419
     // Recommended: use ESP-IDF 5.x (pioarduino) which uses RMT v2.
+    cfg.rx.pingpong = true;
     M5_LIB_LOGW(
-        "ESP32-S3/C3 + ESP-IDF 4.x: RMT RX may crash in noisy environments (esp-idf#13419). "
-        "Consider using ESP-IDF 5.x (pioarduino)");
+        "ESP32-S3/C3 + ESP-IDF 4.x: RMT RX may corrupt memory on a frame longer than the receive buffer "
+        "(esp-idf#13419). Consider using ESP-IDF 5.x (pioarduino)");
 #endif
     cfg.rx.ring_buffer_size       = buf_bytes;
     cfg.rx.filter_enabled         = true;
